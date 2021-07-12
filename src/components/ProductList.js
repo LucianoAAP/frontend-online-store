@@ -1,6 +1,7 @@
 import React from 'react';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import ProductCard from './ProductCard';
+import CategoriesList from './CategoriesList';
 
 class ProductList extends React.Component {
   constructor() {
@@ -54,6 +55,7 @@ class ProductList extends React.Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        <CategoriesList />
         <div>
           { products.map((product) => (
             <ProductCard key={ product.title } product={ product } />
