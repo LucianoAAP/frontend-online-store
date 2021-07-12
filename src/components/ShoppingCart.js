@@ -5,7 +5,7 @@ class ShoppingCart extends React.Component {
   render() {
     return (
       <div>
-        <Link to="/" data-testid="shopping-cart-button">
+        <Link to="/">
           <img src="https://img.icons8.com/ios/50/000000/back--v1.png" alt="voltar" />
         </Link>
         <h1>Carrinho de Compras</h1>
