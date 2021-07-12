@@ -22,7 +22,7 @@ class ProductList extends React.Component {
 
   async searchButton() {
     const { searchInput } = this.state;
-    const filter = await getProductsFromCategoryAndQuery('categoryId', searchInput);
+    const filter = await getProductsFromCategoryAndQuery('', searchInput);
     this.setState({
       products: filter.results,
       searchInput: '',
