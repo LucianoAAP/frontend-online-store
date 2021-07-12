@@ -4,8 +4,8 @@ import ProductCard from './ProductCard';
 import CategoriesList from './CategoriesList';
 
 class ProductList extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       products: [],
       searchInput: '',
