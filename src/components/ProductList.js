@@ -9,9 +9,11 @@ class ProductList extends React.Component {
     this.state = {
       products: [],
       searchInput: '',
+      category: '',
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
     this.searchButton = this.searchButton.bind(this);
+    this.updateCategory = this.updateCategory.bind(this);
   }
 
   inputSearchChange(event) {
@@ -22,12 +24,17 @@ class ProductList extends React.Component {
   }
 
   async searchButton() {
-    const { searchInput } = this.state;
-    const filter = await getProductsFromCategoryAndQuery('', searchInput);
+    const { searchInput, category } = this.state;
+    const filter = await getProductsFromCategoryAndQuery(category, searchInput);
     this.setState({
       products: filter.results,
       searchInput: '',
     });
+  }
+
+  updateCategory(event) {
+    const { id } = event.target;
+    this.setState({ category: id }, () => this.searchButton());
   }
 
   render() {
@@ -55,7 +62,7 @@ class ProductList extends React.Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        <CategoriesList />
+        <CategoriesList callback={ this.updateCategory } />
         <div>
           { products.map((product) => (
             <ProductCard key={ product.title } product={ product } />
