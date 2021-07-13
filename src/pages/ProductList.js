@@ -1,8 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 import { getProductsFromCategoryAndQuery } from '../services/api';
-import ProductCard from './ProductCard';
-import CategoriesList from './CategoriesList';
+import ProductCard from '../components/ProductCard';
+import CategoriesList from '../components/CategoriesList';
 
 class ProductList extends React.Component {
   constructor(props) {
@@ -29,7 +30,7 @@ class ProductList extends React.Component {
     }
   }
 
-  async handleClick(product) {
+  handleClick(product) {
     this.setState({ shouldRedirect: true, productRedirection: product });
   }
 
@@ -60,6 +61,7 @@ class ProductList extends React.Component {
   }
 
   render() {
+    const { cartAdd } = this.props;
     const {
       products,
       searchInput,
@@ -114,6 +116,7 @@ class ProductList extends React.Component {
                   key={ product.title }
                   product={ product }
                   onClick={ this.handleClick }
+                  cartAdd={ cartAdd }
                 />
               ))}
           </div>
@@ -122,5 +125,9 @@ class ProductList extends React.Component {
     );
   }
 }
+
+ProductList.propTypes = {
+  cartAdd: PropTypes.func.isRequired,
+};
 
 export default ProductList;

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 class ProductCard extends Component {
   render() {
-    const { product, onClick } = this.props;
+    const { product, onClick, cartAdd } = this.props;
     const { title, price, thumbnail } = product;
 
     return (
@@ -18,6 +18,13 @@ class ProductCard extends Component {
         >
           Ver Detalhes
         </button>
+        <button
+          type="button"
+          data-testid="product-add-to-cart"
+          onClick={ () => cartAdd(product) }
+        >
+          Adicionar ao Carrinho
+        </button>
       </div>
     );
   }
@@ -30,6 +37,7 @@ ProductCard.propTypes = {
     thumbnail: PropTypes.string.isRequired,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
+  cartAdd: PropTypes.func.isRequired,
 };
 
 export default ProductCard;
