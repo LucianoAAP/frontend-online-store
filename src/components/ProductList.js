@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import ProductCard from './ProductCard';
 import CategoriesList from './CategoriesList';
@@ -9,19 +10,37 @@ class ProductList extends React.Component {
     this.state = {
       products: [],
       searchInput: '',
+      shouldRedirect: false,
+      productRedirection: {},
       category: '',
       loading: false,
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.stateSetting = this.stateSetting.bind(this);
     this.searchButton = this.searchButton.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
+  }
+
+  async componentDidMount() {
+    const filter = await getProductsFromCategoryAndQuery('', '');
+    if (filter) {
+      this.stateSetting(filter.results);
+    }
+  }
+
+  async handleClick(product) {
+    this.setState({ shouldRedirect: true, productRedirection: product });
+  }
+
+  stateSetting(filteredValue) {
+    this.setState({ products: filteredValue });
   }
 
   inputSearchChange(event) {
     const { value } = event.target;
     this.setState({
       searchInput: value,
-      loading: true,
     });
   }
 
@@ -41,7 +60,25 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const { products, searchInput, loading } = this.state;
+    const {
+      products,
+      searchInput,
+      loading,
+      shouldRedirect,
+      productRedirection,
+    } = this.state;
+
+    if (shouldRedirect) {
+      return (
+        <Redirect
+          to={ {
+            pathname: `/${productRedirection.id}`,
+            state: { productRedirection },
+          } }
+        />
+      );
+    }
+
     return (
       <div>
         <form>
@@ -57,7 +94,9 @@ class ProductList extends React.Component {
           <button
             type="button"
             data-testid="query-button"
-            onClick={ this.searchButton }
+            onClick={ () => {
+              this.setState({ loading: true }, () => this.searchButton());
+            } }
           >
             Procurar
           </button>
@@ -71,7 +110,11 @@ class ProductList extends React.Component {
             {loading
               ? <span>Loading...</span>
               : products.map((product) => (
-                <ProductCard key={ product.title } product={ product } />
+                <ProductCard
+                  key={ product.title }
+                  product={ product }
+                  onClick={ this.handleClick }
+                />
               ))}
           </div>
         </div>
