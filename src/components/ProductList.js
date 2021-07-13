@@ -1,4 +1,5 @@
 import React from 'react';
+import { Redirect } from 'react-router-dom';
 import { getProductsFromCategoryAndQuery } from '../services/api';
 import ProductCard from './ProductCard';
 import CategoriesList from './CategoriesList';
@@ -9,9 +10,28 @@ class ProductList extends React.Component {
     this.state = {
       products: [],
       searchInput: '',
+      shouldRedirect: false,
+      productRedirection: {},
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+    this.stateSetting = this.stateSetting.bind(this);
     this.searchButton = this.searchButton.bind(this);
+  }
+
+  async componentDidMount() {
+    const filter = await getProductsFromCategoryAndQuery('', '');
+    if (filter) {
+      this.stateSetting(filter.results);
+    }
+  }
+
+  async handleClick(product) {
+    this.setState({ shouldRedirect: true, productRedirection: product });
+  }
+
+  stateSetting(filteredValue) {
+    this.setState({ products: filteredValue });
   }
 
   inputSearchChange(event) {
@@ -31,7 +51,17 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const { products, searchInput } = this.state;
+    const { products, searchInput, shouldRedirect, productRedirection } = this.state;
+    if (shouldRedirect) {
+      return (
+        <Redirect
+          to={ {
+            pathname: `/${productRedirection.id}`,
+            state: { productRedirection },
+          } }
+        />
+      );
+    }
     return (
       <div>
         <form>
@@ -58,7 +88,11 @@ class ProductList extends React.Component {
         <CategoriesList />
         <div>
           { products.map((product) => (
-            <ProductCard key={ product.title } product={ product } />
+            <ProductCard
+              key={ product.title }
+              product={ product }
+              onClick={ this.handleClick }
+            />
           ))}
         </div>
       </div>
