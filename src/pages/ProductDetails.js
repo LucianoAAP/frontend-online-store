@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CostumerAvaliation from '../components/CostumerAvaliation';
 
 class ProductDetails extends React.Component {
   constructor() {
@@ -35,6 +36,9 @@ class ProductDetails extends React.Component {
         >
           Adicionar ao carrinho
         </button>
+        <div>
+          <CostumerAvaliation title={ title } />
+        </div>
       </div>
     );
   }
