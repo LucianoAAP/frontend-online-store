@@ -30,6 +30,73 @@
   color: #61dafb;
 }
 
+.cat-container {
+  list-style: none;
+  text-align: center;
+}
+
+.cat-container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.cat-list-buttons {
+  background-color: white;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  padding: 1px 15px;
+  text-decoration: none;
+}
+
+.cat-list-buttons:hover {
+  background-color: whitesmoke;
+}
+
+.cat-list-buttons:active {
+  opacity: 0.5;
+}
+
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.product-container {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 80%;
+  min-width: 80%;
+}
+
+.product-card {
+  box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+  font-size: 12px;
+  margin: 5px;
+  padding: 20px;
+  text-align: center;
+  transition: ease-in 0.2s;
+  width: 150px;
+}
+
+.product-card:hover {
+  box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.4);
+  cursor: pointer;
+  width: 160px;
+
+}
+
+.product-card:active {
+  opacity: 0.1;
+}
+
+.product-card img {
+  height: 100px;
+  width: 100px;
+}
+
 @keyframes App-logo-spin {
 
   from {
