@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 import ProductList from './components/ProductList';
-import ShoppingCart from './components/ShoppingCart';
-import ProductDetails from './components/ProductDetails';
+import ShoppingCart from './pages/ShoppingCart';
+import ProductDetails from './pages/ProductDetails';
 
 class App extends React.Component {
   render() {
