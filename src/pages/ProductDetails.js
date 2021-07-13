@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import CostumerAvaliation from '../components/CostumerAvaliation';
 
 class ProductDetails extends React.Component {
   constructor() {
@@ -28,6 +29,9 @@ class ProductDetails extends React.Component {
       <div>
         <h3 data-testid="product-detail-name">{ `${title} - R$${newPrice}` }</h3>
         <img src={ thumbnail } alt={ title } />
+        <div>
+          <CostumerAvaliation title={ title } />
+        </div>
       </div>
     );
   }
