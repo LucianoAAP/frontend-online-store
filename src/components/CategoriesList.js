@@ -23,7 +23,7 @@ class CategoriesList extends React.Component {
       return <h3>Loading...</h3>;
     }
     return (
-      <div>
+      <div className="cat-container">
         <h3>Categorias:</h3>
         <ul>
           {categories.map((cat) => (
