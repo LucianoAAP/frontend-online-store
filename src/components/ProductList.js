@@ -9,29 +9,39 @@ class ProductList extends React.Component {
     this.state = {
       products: [],
       searchInput: '',
+      category: '',
+      loading: false,
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
     this.searchButton = this.searchButton.bind(this);
+    this.updateCategory = this.updateCategory.bind(this);
   }
 
   inputSearchChange(event) {
     const { value } = event.target;
     this.setState({
       searchInput: value,
+      loading: true,
     });
   }
 
   async searchButton() {
-    const { searchInput } = this.state;
-    const filter = await getProductsFromCategoryAndQuery('', searchInput);
+    const { searchInput, category } = this.state;
+    const filter = await getProductsFromCategoryAndQuery(category, searchInput);
     this.setState({
       products: filter.results,
       searchInput: '',
+      loading: false,
     });
   }
 
+  updateCategory(event) {
+    const { id } = event.target;
+    this.setState({ category: id, loading: true }, () => this.searchButton());
+  }
+
   render() {
-    const { products, searchInput } = this.state;
+    const { products, searchInput, loading } = this.state;
     return (
       <div>
         <form>
@@ -51,15 +61,19 @@ class ProductList extends React.Component {
           >
             Procurar
           </button>
+          <p data-testid="home-initial-message">
+            Digite algum termo de pesquisa ou escolha uma categoria.
+          </p>
         </form>
-        <p data-testid="home-initial-message">
-          Digite algum termo de pesquisa ou escolha uma categoria.
-        </p>
-        <CategoriesList />
-        <div>
-          { products.map((product) => (
-            <ProductCard key={ product.title } product={ product } />
-          ))}
+        <div className="main-container">
+          <CategoriesList callback={ this.updateCategory } />
+          <div className="product-container">
+            {loading
+              ? <span>Loading...</span>
+              : products.map((product) => (
+                <ProductCard key={ product.title } product={ product } />
+              ))}
+          </div>
         </div>
       </div>
     );
