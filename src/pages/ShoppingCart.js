@@ -19,8 +19,8 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    const { cart } = this.props;
-    this.setCart(cart);
+    const { cart, quantities } = this.props;
+    this.setCart(cart, quantities);
     this.setPrice();
   }
 
@@ -90,9 +90,7 @@ class ShoppingCart extends React.Component {
   }
 
   render() {
-    const { cartItems, price } = this.state;
-  render() {
-    const { cartItems, quantities } = this.state;
+    const { cartItems, quantities, price } = this.state;
     return (
       <div>
         <Link to="/">
@@ -139,14 +137,13 @@ class ShoppingCart extends React.Component {
                 >
                   +
                 </button>
-                <div data-testid="shopping-cart-product-quantity">1</div>
-              <div data-testid="shopping-cart-product-quantity">
-                { quantities.find((qty) => qty.id === item.id).quantity }
+                <div data-testid="shopping-cart-product-quantity">
+                  { quantities.find((qty) => qty.id === item.id).quantity }
+                </div>
               </div>
             </li>))}
         <h2>{`R$${price}`}</h2>
-      </div>
-    );
+      </div>);
   }
 }
 

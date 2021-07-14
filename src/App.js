@@ -11,21 +11,11 @@ class App extends React.Component {
     this.state = {
       cart: [],
       price: 0,
-    };
-    this.handleCart = this.handleCart.bind(this);
-    this.updatePrice = this.updatePrice.bind(this);
-  }
-
-  handleCart(product) {
-    const { cart } = this.state;
-    if (cart.length === 0) {
-      this.setState({ cart: [product] }, this.updatePrice(product.price));
-    } else if (cart.find((cartItem) => cartItem.id === product.id) !== product) {
-      const newCart = cart.map((item) => item);
-      newCart.push(product);
-      this.setState({ cart: newCart }, this.updatePrice(product.price));
       quantities: [],
     };
+
+    this.cartAdd = this.cartAdd.bind(this);
+    this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
   }
 
@@ -56,8 +46,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { cart, price } = this.state;
-    const { cart, quantities } = this.state;
+    const { cart, price, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
