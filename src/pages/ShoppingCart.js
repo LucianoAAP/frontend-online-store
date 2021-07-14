@@ -7,21 +7,22 @@ class ShoppingCart extends React.Component {
     super(props);
     this.state = {
       cartItems: [],
+      quantities: [],
     };
     this.setCart = this.setCart.bind(this);
   }
 
   componentDidMount() {
-    const { cart } = this.props;
-    this.setCart(cart);
+    const { cart, quantities } = this.props;
+    this.setCart(cart, quantities);
   }
 
-  setCart(items) {
-    this.setState({ cartItems: items });
+  setCart(items, quantityItems) {
+    this.setState({ cartItems: items, quantities: quantityItems });
   }
 
   render() {
-    const { cartItems } = this.state;
+    const { cartItems, quantities } = this.state;
     return (
       <div>
         <Link to="/">
@@ -37,7 +38,7 @@ class ShoppingCart extends React.Component {
             >
               { item.title }
               <div data-testid="shopping-cart-product-quantity">
-                1
+                { quantities.find((qty) => qty.id === item.id).quantity }
               </div>
             </li>))}
       </div>
@@ -47,6 +48,7 @@ class ShoppingCart extends React.Component {
 
 ShoppingCart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
+  quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default ShoppingCart;

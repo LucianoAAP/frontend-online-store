@@ -40,7 +40,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { cart } = this.state;
+    const { cart, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -49,7 +49,11 @@ class App extends React.Component {
         <Switch>
           <Route
             path="/cart"
-            render={ (props) => <ShoppingCart { ...props } cart={ cart } /> }
+            render={ (props) => (<ShoppingCart
+              { ...props }
+              cart={ cart }
+              quantities={ quantities }
+            />) }
           />
           <Route
             path="/:id"
