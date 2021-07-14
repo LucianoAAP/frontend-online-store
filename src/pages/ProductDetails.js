@@ -20,7 +20,7 @@ class ProductDetails extends React.Component {
   }
 
   render() {
-    const { location } = this.props;
+    const { location, cartAdd } = this.props;
     const { productRedirection } = location.state;
     const { title, price, thumbnail } = productRedirection;
     const newPrice = this.handlePrice(price);
@@ -29,6 +29,13 @@ class ProductDetails extends React.Component {
       <div>
         <h3 data-testid="product-detail-name">{ `${title} - R$${newPrice}` }</h3>
         <img src={ thumbnail } alt={ title } />
+        <button
+          type="button"
+          data-testid="product-detail-add-to-cart"
+          onClick={ () => cartAdd(productRedirection) }
+        >
+          Adicionar ao carrinho
+        </button>
         <div>
           <CostumerAvaliation title={ title } />
         </div>
@@ -47,6 +54,7 @@ ProductDetails.propTypes = {
       }).isRequired,
     }).isRequired,
   }).isRequired,
+  cartAdd: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;
