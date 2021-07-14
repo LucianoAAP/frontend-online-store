@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import CostumerAvaliation from '../components/CostumerAvaliation';
+import ShippingStatus from '../components/ShippingStatus';
 
 class ProductDetails extends React.Component {
   constructor() {
@@ -22,12 +23,13 @@ class ProductDetails extends React.Component {
   render() {
     const { location, cartAdd } = this.props;
     const { productRedirection } = location.state;
-    const { title, price, thumbnail } = productRedirection;
+    const { title, price, thumbnail, shipping } = productRedirection;
     const newPrice = this.handlePrice(price);
 
     return (
       <div>
         <h3 data-testid="product-detail-name">{ `${title} - R$${newPrice}` }</h3>
+        <ShippingStatus status={ shipping.free_shipping } />
         <img src={ thumbnail } alt={ title } />
         <button
           type="button"
@@ -51,6 +53,9 @@ ProductDetails.propTypes = {
         price: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         thumbnail: PropTypes.string.isRequired,
+        shipping: PropTypes.shape({
+          free_shipping: PropTypes.bool.isRequired,
+        }).isRequired,
       }).isRequired,
     }).isRequired,
   }).isRequired,
