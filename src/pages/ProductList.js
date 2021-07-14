@@ -111,9 +111,9 @@ class ProductList extends React.Component {
           <div className="product-container">
             {loading
               ? <span>Loading...</span>
-              : products.map((product) => (
+              : products.map((product, index) => (
                 <ProductCard
-                  key={ product.title }
+                  key={ index }
                   product={ product }
                   onClick={ this.handleClick }
                   cartAdd={ cartAdd }
