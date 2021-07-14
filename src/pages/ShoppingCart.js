@@ -8,6 +8,7 @@ class ShoppingCart extends React.Component {
     this.state = {
       cartItems: [],
       price: 0,
+      quantities: [],
     };
     this.setCart = this.setCart.bind(this);
     this.deleteCartItem = this.deleteCartItem.bind(this);
@@ -39,10 +40,12 @@ class ShoppingCart extends React.Component {
       counter.innerHTML = newCounterNumber;
       this.subtractItemPrice(counter);
     }
+    const { cart, quantities } = this.props;
+    this.setCart(cart, quantities);
   }
 
-  setCart(items) {
-    this.setState({ cartItems: items });
+  setCart(items, quantityItems) {
+    this.setState({ cartItems: items, quantities: quantityItems });
   }
 
   setPrice() {
@@ -88,6 +91,8 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { cartItems, price } = this.state;
+  render() {
+    const { cartItems, quantities } = this.state;
     return (
       <div>
         <Link to="/">
@@ -125,7 +130,6 @@ class ShoppingCart extends React.Component {
                   -
                 </button>
                 {' '}
-                {' '}
                 <button
                   type="button"
                   data-testid="product-increase-quantity"
@@ -136,6 +140,8 @@ class ShoppingCart extends React.Component {
                   +
                 </button>
                 <div data-testid="shopping-cart-product-quantity">1</div>
+              <div data-testid="shopping-cart-product-quantity">
+                { quantities.find((qty) => qty.id === item.id).quantity }
               </div>
             </li>))}
         <h2>{`R$${price}`}</h2>
@@ -147,6 +153,7 @@ class ShoppingCart extends React.Component {
 ShoppingCart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
   totalPrice: PropTypes.number.isRequired,
+  quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
 export default ShoppingCart;

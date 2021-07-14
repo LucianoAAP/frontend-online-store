@@ -24,6 +24,26 @@ class App extends React.Component {
       const newCart = cart.map((item) => item);
       newCart.push(product);
       this.setState({ cart: newCart }, this.updatePrice(product.price));
+      quantities: [],
+    };
+    this.cartAdd = this.cartAdd.bind(this);
+  }
+
+  cartAdd(product) {
+    const { cart, quantities } = this.state;
+    if (quantities.some((p) => p.id === product.id)) {
+      const newQuantity = quantities.find((p) => p.id === product.id).quantity + 1;
+      const newQuantities = quantities.filter((p) => p.id !== product.id);
+      const newProduct = { id: product.id, quantity: newQuantity };
+      newQuantities.push(newProduct);
+      this.setState({ quantities: newQuantities });
+    } else {
+      const newCart = cart.map((item) => item);
+      newCart.push(product);
+      const newQuantities = quantities.map((item) => item);
+      const newQuantity = { id: product.id, quantity: 1 };
+      newQuantities.push(newQuantity);
+      this.setState({ cart: newCart, quantities: newQuantities });
     }
   }
 
@@ -37,6 +57,7 @@ class App extends React.Component {
 
   render() {
     const { cart, price } = this.state;
+    const { cart, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -49,13 +70,14 @@ class App extends React.Component {
               { ...props }
               cart={ cart }
               totalPrice={ price }
+              quantities={ quantities }
             />) }
           />
           <Route
             path="/:id"
             render={ (props) => (<ProductDetails
               { ...props }
-              cartAdd={ this.handleCart }
+              cartAdd={ this.cartAdd }
             />) }
           />
           <Route
@@ -63,7 +85,7 @@ class App extends React.Component {
             path="/"
             render={ (props) => (<ProductList
               { ...props }
-              cartAdd={ this.handleCart }
+              cartAdd={ this.cartAdd }
             />) }
           />
         </Switch>
