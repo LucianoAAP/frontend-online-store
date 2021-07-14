@@ -10,23 +10,33 @@ class App extends React.Component {
     super();
     this.state = {
       cart: [],
+      price: 0,
     };
     this.handleCart = this.handleCart.bind(this);
+    this.updatePrice = this.updatePrice.bind(this);
   }
 
   handleCart(product) {
     const { cart } = this.state;
     if (cart.length === 0) {
-      this.setState({ cart: [product] });
-    } else {
+      this.setState({ cart: [product] }, this.updatePrice(product.price));
+    } else if (cart.find((cartItem) => cartItem.id === product.id) !== product) {
       const newCart = cart.map((item) => item);
       newCart.push(product);
-      this.setState({ cart: newCart });
+      this.setState({ cart: newCart }, this.updatePrice(product.price));
     }
   }
 
+  updatePrice(productPrice) {
+    const { price } = this.state;
+    const priceNumber = parseInt((price * 100), 10) / 100;
+    const priceSum = priceNumber + productPrice;
+    const priceNumberFixed = (+priceSum.toFixed(2));
+    this.setState({ price: priceNumberFixed });
+  }
+
   render() {
-    const { cart } = this.state;
+    const { cart, price } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -35,7 +45,11 @@ class App extends React.Component {
         <Switch>
           <Route
             path="/cart"
-            render={ (props) => <ShoppingCart { ...props } cart={ cart } /> }
+            render={ (props) => (<ShoppingCart
+              { ...props }
+              cart={ cart }
+              totalPrice={ price }
+            />) }
           />
           <Route
             path="/:id"
