@@ -12,30 +12,24 @@ class App extends React.Component {
       cart: [],
       quantities: [],
     };
-    this.handleCart = this.handleCart.bind(this);
+    this.cartAdd = this.cartAdd.bind(this);
   }
 
-  handleCart(product) {
+  cartAdd(product) {
     const { cart, quantities } = this.state;
-    if (cart.length === 0) {
-      const newQuantity = { id: product.id, quantity: 1 };
-      this.setState({ cart: [product], quantities: [newQuantity] });
+    if (quantities.some((p) => p.id === product.id)) {
+      const newQuantity = quantities.find((p) => p.id === product.id).quantity + 1;
+      const newQuantities = quantities.filter((p) => p.id !== product.id);
+      const newProduct = { id: product.id, quantity: newQuantity };
+      newQuantities.push(newProduct);
+      this.setState({ quantities: newQuantities });
     } else {
-      if (quantities.some((p) => p.id === product.id)) {
-        const newQuantity = quantities.find((p) => p.id === product.id).quantity + 1;
-        const newQuantities = quantities.filter((p) => p.id !== product.id);
-        const newProduct = { id: product.id, quantity: newQuantity };
-        newQuantities.push(newProduct);
-        this.setState({ quantities: newQuantities });
-      }
-      if (!quantities.some((p) => p.id === product.id)) {
-        const newCart = cart.map((item) => item);
-        newCart.push(product);
-        const newQuantities = quantities.map((item) => item);
-        const newQuantity = { id: product.id, quantity: 1 };
-        newQuantities.push(newQuantity);
-        this.setState({ cart: newCart, quantities: newQuantities });
-      }
+      const newCart = cart.map((item) => item);
+      newCart.push(product);
+      const newQuantities = quantities.map((item) => item);
+      const newQuantity = { id: product.id, quantity: 1 };
+      newQuantities.push(newQuantity);
+      this.setState({ cart: newCart, quantities: newQuantities });
     }
   }
 
@@ -59,7 +53,7 @@ class App extends React.Component {
             path="/:id"
             render={ (props) => (<ProductDetails
               { ...props }
-              cartAdd={ this.handleCart }
+              cartAdd={ this.cartAdd }
             />) }
           />
           <Route
@@ -67,7 +61,7 @@ class App extends React.Component {
             path="/"
             render={ (props) => (<ProductList
               { ...props }
-              cartAdd={ this.handleCart }
+              cartAdd={ this.cartAdd }
             />) }
           />
         </Switch>
