@@ -10,8 +10,12 @@ class App extends React.Component {
     super();
     this.state = {
       cart: [],
+      price: 0,
       quantities: [],
     };
+
+    this.cartAdd = this.cartAdd.bind(this);
+    this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
   }
 
@@ -33,8 +37,16 @@ class App extends React.Component {
     }
   }
 
+  updatePrice(productPrice) {
+    const { price } = this.state;
+    const priceNumber = parseInt((price * 100), 10) / 100;
+    const priceSum = priceNumber + productPrice;
+    const priceNumberFixed = (+priceSum.toFixed(2));
+    this.setState({ price: priceNumberFixed });
+  }
+
   render() {
-    const { cart, quantities } = this.state;
+    const { cart, price, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -46,6 +58,7 @@ class App extends React.Component {
             render={ (props) => (<ShoppingCart
               { ...props }
               cart={ cart }
+              totalPrice={ price }
               quantities={ quantities }
             />) }
           />
