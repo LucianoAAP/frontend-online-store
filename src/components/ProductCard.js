@@ -3,26 +3,10 @@ import PropTypes from 'prop-types';
 import ShippingStatus from './ShippingStatus';
 
 class ProductCard extends Component {
-  constructor() {
-    super();
-    this.handlePrice = this.handlePrice.bind(this);
-  }
-
-  handlePrice(price) {
-    if (price.toString().includes('.')) {
-      const splittedPrice = price.toString().split('.');
-      if (splittedPrice[1].length < 2) {
-        return `${splittedPrice[0]},${splittedPrice[1]}0`;
-      }
-      return `${splittedPrice[0]},${splittedPrice[1]}`;
-    }
-    return `${price},00`;
-  }
-
   render() {
-    const { product, onClick, cartAdd } = this.props;
+    const { product, onClick, cartAdd, handlePrice } = this.props;
     const { title, price, thumbnail, shipping } = product;
-    const newPrice = this.handlePrice(price);
+    const newPrice = handlePrice(price);
 
     return (
       <div data-testid="product" className="product-card">
@@ -60,6 +44,7 @@ ProductCard.propTypes = {
   }).isRequired,
   onClick: PropTypes.func.isRequired,
   cartAdd: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ProductCard;

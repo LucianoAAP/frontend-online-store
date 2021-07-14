@@ -70,8 +70,8 @@ class ShoppingCart extends React.Component {
 
   render() {
     const { cartItems, quantities } = this.state;
-    const { cartQuantityAdd, cartQuantitySub } = this.props;
-    const totalPrice = this.handleTotalPrice();
+    const { cartQuantityAdd, cartQuantitySub, handlePrice } = this.props;
+    const totalPrice = handlePrice(this.handleTotalPrice());
     return (
       <div>
         <Link to="/">
@@ -136,6 +136,7 @@ ShoppingCart.propTypes = {
   cartQuantityAdd: PropTypes.func.isRequired,
   cartQuantitySub: PropTypes.func.isRequired,
   cartItemDelete: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ShoppingCart;

@@ -13,12 +13,24 @@ class App extends React.Component {
       quantities: [],
     };
 
+    this.handlePrice = this.handlePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
     this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
     this.cartQuantityAdd = this.cartQuantityAdd.bind(this);
     this.cartQuantitySub = this.cartQuantitySub.bind(this);
     this.cartItemDelete = this.cartItemDelete.bind(this);
+  }
+
+  handlePrice(price) {
+    if (price.toString().includes('.')) {
+      const splittedPrice = price.toString().split('.');
+      if (splittedPrice[1].length < 2) {
+        return `${splittedPrice[0]},${splittedPrice[1]}0`;
+      }
+      return `${splittedPrice[0]},${splittedPrice[1]}`;
+    }
+    return `${price},00`;
   }
 
   cartAdd(product) {
@@ -88,6 +100,7 @@ class App extends React.Component {
               cartQuantityAdd={ this.cartQuantityAdd }
               cartQuantitySub={ this.cartQuantitySub }
               cartItemDelete={ this.cartItemDelete }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
@@ -95,6 +108,7 @@ class App extends React.Component {
             render={ (props) => (<ProductDetails
               { ...props }
               cartAdd={ this.cartAdd }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
@@ -103,6 +117,7 @@ class App extends React.Component {
             render={ (props) => (<ProductList
               { ...props }
               cartAdd={ this.cartAdd }
+              handlePrice={ this.handlePrice }
             />) }
           />
         </Switch>

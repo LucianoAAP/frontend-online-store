@@ -4,27 +4,11 @@ import CustumerEvaluation from '../components/CustumerEvaluation';
 import ShippingStatus from '../components/ShippingStatus';
 
 class ProductDetails extends React.Component {
-  constructor() {
-    super();
-    this.handlePrice = this.handlePrice.bind(this);
-  }
-
-  handlePrice(price) {
-    if (price.toString().includes('.')) {
-      const splittedPrice = price.toString().split('.');
-      if (splittedPrice[1].length < 2) {
-        return `${splittedPrice[0]},${splittedPrice[1]}0`;
-      }
-      return `${splittedPrice[0]},${splittedPrice[1]}`;
-    }
-    return `${price},00`;
-  }
-
   render() {
-    const { location, cartAdd } = this.props;
+    const { location, cartAdd, handlePrice } = this.props;
     const { productRedirection } = location.state;
     const { title, price, thumbnail, shipping } = productRedirection;
-    const newPrice = this.handlePrice(price);
+    const newPrice = handlePrice(price);
 
     return (
       <div>
@@ -60,6 +44,7 @@ ProductDetails.propTypes = {
     }).isRequired,
   }).isRequired,
   cartAdd: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;
