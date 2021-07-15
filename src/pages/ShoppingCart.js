@@ -25,12 +25,16 @@ class ShoppingCart extends React.Component {
   handlePlusChange(itemId) {
     const { updateCartToApp } = this.props;
     const { cartItems, quantities } = this.state;
-    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
-    const newQuantities = quantities.filter((p) => p.id !== itemId);
-    const newProduct = { id: itemId, quantity: newQuantity };
-    newQuantities.push(newProduct);
-    this.setState({ quantities: newQuantities });
-    updateCartToApp(cartItems, newQuantities);
+    const cartProduct = cartItems.find((Product) => Product.id === itemId);
+    const itemQuantity = quantities.find((qty) => qty.id === itemId);
+    if (itemQuantity.quantity < cartProduct.available_quantity) {
+      const newQuantity = itemQuantity.quantity + 1;
+      const newQuantities = quantities.filter((p) => p.id !== itemId);
+      const newProduct = { id: itemId, quantity: newQuantity };
+      newQuantities.push(newProduct);
+      this.setState({ quantities: newQuantities });
+      updateCartToApp(cartItems, newQuantities);
+    }
   }
 
   handleSubtractChange(itemId) {
