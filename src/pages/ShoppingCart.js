@@ -7,90 +7,71 @@ class ShoppingCart extends React.Component {
     super(props);
     this.state = {
       cartItems: [],
-      price: 0,
       quantities: [],
     };
     this.setCart = this.setCart.bind(this);
+    this.handlePlusChange = this.handlePlusChange.bind(this);
+    this.handleSubtractChange = this.handleSubtractChange.bind(this);
     this.deleteCartItem = this.deleteCartItem.bind(this);
-    this.setPrice = this.setPrice.bind(this);
-    this.deleteItemPrice = this.deleteItemPrice.bind(this);
-    this.sumItemPrice = this.sumItemPrice.bind(this);
-    this.subtractItemPrice = this.subtractItemPrice.bind(this);
+    this.handleTotalPrice = this.handleTotalPrice.bind(this);
   }
 
   componentDidMount() {
     const { cart, quantities } = this.props;
     this.setCart(cart, quantities);
-    this.setPrice();
   }
 
-  handlePlusChange(counter) {
-    const counterNumber = counter.innerHTML;
-    const parseIntCounterNumber = parseInt(counterNumber, 10);
-    const newCounterNumber = parseIntCounterNumber + 1;
-    counter.innerHTML = newCounterNumber;
-    this.sumItemPrice(counter);
+  handlePlusChange(itemId) {
+    const { quantities } = this.state;
+    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
+    const newQuantities = quantities.filter((p) => p.id !== itemId);
+    const newProduct = { id: itemId, quantity: newQuantity };
+    newQuantities.push(newProduct);
+    this.setState({ quantities: newQuantities });
   }
 
-  handleSubtractChange(counter) {
-    const counterNumber = counter.innerHTML;
-    const parseIntCounterNumber = parseInt(counterNumber, 10);
-    if (parseIntCounterNumber > 1) {
-      const newCounterNumber = parseIntCounterNumber - 1;
-      counter.innerHTML = newCounterNumber;
-      this.subtractItemPrice(counter);
+  handleSubtractChange(itemId) {
+    const { quantities } = this.state;
+    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity - 1;
+    if (newQuantity === 0) {
+      this.deleteCartItem(itemId);
+    } else {
+      const newQuantities = quantities.filter((p) => p.id !== itemId);
+      const newProduct = { id: itemId, quantity: newQuantity };
+      newQuantities.push(newProduct);
+      this.setState({ quantities: newQuantities });
     }
-    const { cart, quantities } = this.props;
-    this.setCart(cart, quantities);
+  }
+
+  handleTotalPrice() {
+    const { cartItems, quantities } = this.state;
+    if (cartItems.length === 0) {
+      return 0;
+    }
+    return cartItems.reduce((accumulator, current) => {
+      accumulator += current.price * quantities
+        .find((item) => item.id === current.id).quantity;
+      return accumulator;
+    }, 0);
   }
 
   setCart(items, quantityItems) {
     this.setState({ cartItems: items, quantities: quantityItems });
   }
 
-  setPrice() {
-    const { totalPrice } = this.props;
-    this.setState({ price: totalPrice });
-  }
-
-  deleteItemPrice() {
-    const { cartItems } = this.state;
-    let newPrice = 0;
-    cartItems.forEach((item) => {
-      newPrice += +item.price;
-    });
-    const newPriceFixed = +newPrice.toFixed(2);
-    this.setState({ price: newPriceFixed });
-  }
-
-  sumItemPrice(childNode) {
-    const { price } = this.state;
-    const nodePrice = +childNode.parentNode.parentNode.firstChild.innerHTML;
-    const newPrice = nodePrice + +price;
-    const newPriceFixed = +newPrice.toFixed(2);
-    this.setState({ price: newPriceFixed });
-  }
-
-  subtractItemPrice(childNode) {
-    const { price } = this.state;
-    const nodePrice = +childNode.parentNode.parentNode.firstChild.innerHTML;
-    const newPrice = +price - nodePrice;
-    const newPriceFixed = +newPrice.toFixed(2);
-    this.setState({ price: newPriceFixed });
-  }
-
   deleteCartItem(id) {
-    const { cartItems } = this.state;
-    const newCart = cartItems.map((item) => item);
-    const newCartCopy = cartItems.map((item) => item);
-    const cartItem = newCart.filter((item) => item.id === id);
-    const cartItemIndex = newCartCopy.indexOf(...cartItem);
-    newCartCopy.splice(cartItemIndex, 1);
-    this.setState({ cartItems: newCartCopy }, () => this.deleteItemPrice());
+    const { cartItemDelete } = this.props;
+    const { cartItems, quantities } = this.state;
+    const newCart = cartItems.filter((item) => item.id !== id);
+    const newQuantities = quantities.filter((item) => item.id !== id);
+    this.setState({ cartItems: newCart, quantities: newQuantities });
+    cartItemDelete(newCart, newQuantities);
   }
 
   render() {
-    const { cartItems, quantities, price } = this.state;
+    const { cartItems, quantities } = this.state;
+    const { cartQuantityAdd, cartQuantitySub, handlePrice } = this.props;
+    const totalPrice = handlePrice(this.handleTotalPrice());
     return (
       <div>
         <Link to="/">
@@ -108,8 +89,8 @@ class ShoppingCart extends React.Component {
               <div>{ item.price }</div>
               <button
                 type="button"
-                onClick={ (event) => {
-                  this.deleteCartItem(event.target.parentNode.className);
+                onClick={ () => {
+                  this.deleteCartItem(item.id);
                 } }
               >
                 X
@@ -121,8 +102,9 @@ class ShoppingCart extends React.Component {
                 <button
                   type="button"
                   data-testid="product-decrease-quantity"
-                  onClick={ (event) => {
-                    this.handleSubtractChange(event.target.parentNode.lastChild);
+                  onClick={ () => {
+                    this.handleSubtractChange(item.id);
+                    cartQuantitySub(item.id);
                   } }
                 >
                   -
@@ -131,8 +113,9 @@ class ShoppingCart extends React.Component {
                 <button
                   type="button"
                   data-testid="product-increase-quantity"
-                  onClick={ (event) => {
-                    this.handlePlusChange(event.target.parentNode.lastChild);
+                  onClick={ () => {
+                    this.handlePlusChange(item.id);
+                    cartQuantityAdd(item.id);
                   } }
                 >
                   +
@@ -142,15 +125,18 @@ class ShoppingCart extends React.Component {
                 </div>
               </div>
             </li>))}
-        <h2>{`R$${price}`}</h2>
+        <h2>{`R$${totalPrice}`}</h2>
       </div>);
   }
 }
 
 ShoppingCart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
-  totalPrice: PropTypes.number.isRequired,
   quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
+  cartQuantityAdd: PropTypes.func.isRequired,
+  cartQuantitySub: PropTypes.func.isRequired,
+  cartItemDelete: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ShoppingCart;

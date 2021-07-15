@@ -97,6 +97,10 @@
   width: 100px;
 }
 
+.shipping-status {
+  color: green;
+}
+
 @keyframes App-logo-spin {
 
   from {

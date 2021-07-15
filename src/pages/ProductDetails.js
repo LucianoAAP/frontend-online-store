@@ -1,33 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CostumerAvaliation from '../components/CostumerAvaliation';
+import CustumerEvaluation from '../components/CustumerEvaluation';
+import ShippingStatus from '../components/ShippingStatus';
 
 class ProductDetails extends React.Component {
-  constructor() {
-    super();
-    this.handlePrice = this.handlePrice.bind(this);
-  }
-
-  handlePrice(price) {
-    if (price.toString().includes('.')) {
-      const splittedPrice = price.toString().split('.');
-      if (splittedPrice[1].length < 2) {
-        return `${splittedPrice[0]},${splittedPrice[1]}0`;
-      }
-      return `${splittedPrice[0]},${splittedPrice[1]}`;
-    }
-    return `${price},00`;
-  }
-
   render() {
-    const { location, cartAdd } = this.props;
+    const { location, cartAdd, handlePrice } = this.props;
     const { productRedirection } = location.state;
-    const { title, price, thumbnail } = productRedirection;
-    const newPrice = this.handlePrice(price);
+    const { title, price, thumbnail, shipping } = productRedirection;
+    const newPrice = handlePrice(price);
 
     return (
       <div>
         <h3 data-testid="product-detail-name">{ `${title} - R$${newPrice}` }</h3>
+        <ShippingStatus status={ shipping.free_shipping } />
         <img src={ thumbnail } alt={ title } />
         <button
           type="button"
@@ -37,7 +23,7 @@ class ProductDetails extends React.Component {
           Adicionar ao carrinho
         </button>
         <div>
-          <CostumerAvaliation title={ title } />
+          <CustumerEvaluation title={ title } />
         </div>
       </div>
     );
@@ -51,10 +37,14 @@ ProductDetails.propTypes = {
         price: PropTypes.number.isRequired,
         title: PropTypes.string.isRequired,
         thumbnail: PropTypes.string.isRequired,
+        shipping: PropTypes.shape({
+          free_shipping: PropTypes.bool.isRequired,
+        }).isRequired,
       }).isRequired,
     }).isRequired,
   }).isRequired,
   cartAdd: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ProductDetails;

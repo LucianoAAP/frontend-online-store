@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import ShippingStatus from './ShippingStatus';
 
 class ProductCard extends Component {
   render() {
-    const { product, onClick, cartAdd } = this.props;
-    const { title, price, thumbnail } = product;
+    const { product, onClick, cartAdd, handlePrice } = this.props;
+    const { title, price, thumbnail, shipping } = product;
+    const newPrice = handlePrice(price);
 
     return (
       <div data-testid="product" className="product-card">
         <h4>{ title }</h4>
         <img src={ thumbnail } alt={ title } />
-        <p>{ price }</p>
+        <p>{ newPrice }</p>
+        <ShippingStatus status={ shipping.free_shipping } />
         <button
           type="button"
           data-testid="product-detail-link"
@@ -35,9 +38,13 @@ ProductCard.propTypes = {
     price: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     thumbnail: PropTypes.string.isRequired,
+    shipping: PropTypes.shape({
+      free_shipping: PropTypes.bool.isRequired,
+    }).isRequired,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
   cartAdd: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ProductCard;
