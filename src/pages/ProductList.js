@@ -15,12 +15,14 @@ class ProductList extends React.Component {
       productRedirection: {},
       category: '',
       loading: false,
+      selectPrice: '',
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.stateSetting = this.stateSetting.bind(this);
     this.searchButton = this.searchButton.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   async componentDidMount() {
@@ -34,15 +36,29 @@ class ProductList extends React.Component {
     this.setState({ shouldRedirect: true, productRedirection: product });
   }
 
-  stateSetting(filteredValue) {
-    this.setState({ products: filteredValue });
+  handleSelectChange(e) {
+    const { products } = this.state;
+    const { value } = e.target;
+    this.setState({ selectPrice: value });
+
+    if (value === 'bigger') {
+      const biggerToSmall = products.sort((a, b) => b.price - a.price);
+      this.setState({
+        products: [...biggerToSmall],
+        selectPrice: 'bigger',
+      });
+    } else {
+      const smallToBigger = products.sort((a, b) => a.price - b.price);
+      this.setState({
+        products: [...smallToBigger],
+        selectPrice: 'smaller',
+      });
+    }
   }
 
-  inputSearchChange(event) {
-    const { value } = event.target;
-    this.setState({
-      searchInput: value,
-    });
+  updateCategory(event) {
+    const { id } = event.target;
+    this.setState({ category: id, loading: true }, () => this.searchButton());
   }
 
   async searchButton() {
@@ -55,9 +71,15 @@ class ProductList extends React.Component {
     });
   }
 
-  updateCategory(event) {
-    const { id } = event.target;
-    this.setState({ category: id, loading: true }, () => this.searchButton());
+  inputSearchChange(event) {
+    const { value } = event.target;
+    this.setState({
+      searchInput: value,
+    });
+  }
+
+  stateSetting(filteredValue) {
+    this.setState({ products: filteredValue });
   }
 
   render() {
@@ -68,6 +90,7 @@ class ProductList extends React.Component {
       loading,
       shouldRedirect,
       productRedirection,
+      selectPrice,
     } = this.state;
 
     if (shouldRedirect) {
@@ -105,6 +128,14 @@ class ProductList extends React.Component {
           <p data-testid="home-initial-message">
             Digite algum termo de pesquisa ou escolha uma categoria.
           </p>
+          <select
+            onChange={ this.handleSelectChange }
+            value={ selectPrice }
+          >
+            <option value="by-price">Ordenar por preço:</option>
+            <option value="bigger">Maior preço</option>
+            <option value="smaller">Menor preço</option>
+          </select>
         </form>
         <div className="main-container">
           <CategoriesList callback={ this.updateCategory } />
