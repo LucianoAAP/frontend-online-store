@@ -4,6 +4,44 @@ import './checkout.css';
 import PropTypes from 'prop-types';
 
 class Checkout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      fullname: '',
+      cpf: '',
+      email: '',
+      tel: '',
+      cep: '',
+      address: '',
+      status: 'waiting',
+      submit: false,
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.check = this.check.bind(this);
+    this.submit = this.submit.bind(this);
+  }
+
+  handleChange({ target }) {
+    const { name, value } = target;
+    this.setState({
+      [name]: value,
+    }, () => this.check());
+  }
+
+  check() {
+    const arrayState = Object.values(this.state);
+    const filled = arrayState.every((state) => state !== '');
+    if (filled) this.setState({ status: 'OK' });
+  }
+
+  submit(e) {
+    e.preventDefault();
+    const { status } = this.state;
+    if (status === 'OK') {
+      this.setState({ submit: true });
+    }
+  }
+
   fullName() {
     return (
       <input
@@ -12,6 +50,8 @@ class Checkout extends Component {
         id="fullname"
         name="fullname"
         placeholder="Nome Completo"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
@@ -24,6 +64,8 @@ class Checkout extends Component {
         id="cpf"
         name="cpf"
         placeholder="CPF"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
@@ -31,16 +73,18 @@ class Checkout extends Component {
   email() {
     return (
       <input
-        type="text"
+        type="email"
         data-testid="checkout-email"
         id="email"
         name="email"
         placeholder="Email"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
 
-  phone() {
+  tel() {
     return (
       <input
         type="text"
@@ -48,11 +92,13 @@ class Checkout extends Component {
         id="tel"
         name="tel"
         placeholder="Telefone"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
 
-  zip() {
+  cep() {
     return (
       <input
         type="text"
@@ -60,6 +106,8 @@ class Checkout extends Component {
         id="cep"
         name="cep"
         placeholder="CEP"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
@@ -72,6 +120,8 @@ class Checkout extends Component {
         id="address"
         name="address"
         placeholder="Endereço"
+        onChange={ this.handleChange }
+        required
       />
     );
   }
@@ -111,9 +161,19 @@ class Checkout extends Component {
 
   render() {
     const { cart } = this.props;
+    const { submit } = this.state;
+    if (submit) {
+      return (
+        <div className="states-success">
+          <meta http-Equiv="refresh" content="3; URL='/'" />
+          <h2>Compra Realizada com Sucesso!!!</h2>
+          <p>Volte sempre! :D</p>
+        </div>
+      );
+    }
     const total = cart.reduce((acc, { price }) => (acc + price), 0).toFixed(2);
     return (
-      <main>
+      <form onSubmit={ this.submit }>
         <header>
           <Link to="/">
             <img src="https://img.icons8.com/ios/50/000000/left2.png" alt="voltar" />
@@ -123,13 +183,12 @@ class Checkout extends Component {
           <h3>Finalizar Compras</h3>
           <div className="review-container">
             <h4>Revise seus Produtos</h4>
-            <table>
+            <table cellPadding="10px">
               {cart.map(({ id, title, price }) => (
                 <tr key={ id }>
                   <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
                   <td>{`${title}`}</td>
-                  <td>R$: </td>
-                  <td>{price}</td>
+                  <td>{`R$${price}`}</td>
                 </tr>
               ))}
             </table>
@@ -138,47 +197,47 @@ class Checkout extends Component {
               {total}
             </h4>
           </div>
-          <div className="buyer-info-container">
+          <form className="buyer-info-container">
             <h4>Informações do Comprador</h4>
             <div>
               {this.fullName()}
               {this.cpf()}
               {this.email()}
-              {this.phone()}
-              {this.zip()}
+              {this.tel()}
+              {this.cep()}
               {this.address()}
               {this.complement()}
               {this.num()}
               {this.city()}
             </div>
-          </div>
+          </form>
           <div className="payment-container">
             <h4>Método de Pagamento</h4>
             <div>
               <span>Boleto: </span>
-              <input type="radio" id="boleto" name="payment" />
+              <input type="radio" id="boleto" name="payment" required />
               <img src="https://img.icons8.com/color/48/000000/boleto-bankario.png" alt="icon-boleto" />
             </div>
             <div>
               <p>Cartão de Crédito: </p>
-              <input type="radio" id="visa" name="payment" />
+              <input type="radio" id="visa" name="payment" required />
               <span>Visa</span>
               <img src="https://img.icons8.com/ios/50/000000/bank-card-back-side.png" alt="icon-card" />
-              <input type="radio" id="master" name="payment" />
+              <input type="radio" id="master" name="payment" required />
               <span>Master</span>
               <img src="https://img.icons8.com/ios/50/000000/bank-card-back-side.png" alt="icon-card" />
-              <input type="radio" id="elo" name="payment" />
+              <input type="radio" id="elo" name="payment" required />
               <span>Elo</span>
               <img src="https://img.icons8.com/ios/50/000000/bank-card-back-side.png" alt="icon-card" />
             </div>
           </div>
           <nav className="buttons-container">
-            <button type="button" className="buy-button">
+            <button type="submit" className="buy-button">
               Comprar
             </button>
           </nav>
         </section>
-      </main>
+      </form>
     );
   }
 }

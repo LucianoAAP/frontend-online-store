@@ -61,3 +61,16 @@ h4, p, span {
 .payment-container span {
   margin-right: 5px;
 }
+
+.states-success {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.states-success p {
+  font-size: 12px;
+  font-weight: 500;
+}
