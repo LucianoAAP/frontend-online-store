@@ -46,7 +46,7 @@ class App extends React.Component {
   }
 
   getLocalStorage() {
-    const getCart = localStorage.getItem('cart');
+    const getCart = JSON.parse(localStorage.getItem('cart'));
     const getQuantities = JSON.parse(localStorage.getItem('quantities'));
     this.setState({ cart: getCart, quantities: getQuantities });
   }
