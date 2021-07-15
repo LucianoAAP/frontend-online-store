@@ -13,6 +13,7 @@ class ShoppingCart extends React.Component {
     this.handlePlusChange = this.handlePlusChange.bind(this);
     this.handleSubtractChange = this.handleSubtractChange.bind(this);
     this.deleteCartItem = this.deleteCartItem.bind(this);
+    this.deleteCart = this.deleteCart.bind(this);
     this.handleTotalPrice = this.handleTotalPrice.bind(this);
   }
 
@@ -72,6 +73,14 @@ class ShoppingCart extends React.Component {
     updateCartToApp(newCart, newQuantities);
   }
 
+  deleteCart() {
+    const { updateCartToApp } = this.props;
+    const newCart = [];
+    const newQuantities = [];
+    this.setState({ cartItems: newCart, quantities: newQuantities });
+    updateCartToApp(newCart, newQuantities);
+  }
+
   render() {
     const { cartItems, quantities } = this.state;
     const { handlePrice } = this.props;
@@ -127,13 +136,16 @@ class ShoppingCart extends React.Component {
         <h2>{`R$${totalPrice}`}</h2>
         {cartItems.length > 0
           && (
-            <nav>
-              <Link to="/checkout">
-                <button type="button" data-testid="checkout-products">
-                  Comprar
-                </button>
-              </Link>
-            </nav>
+            <div>
+              <button type="button" onClick={ this.deleteCart }>Limpar Carrinho</button>
+              <nav>
+                <Link to="/checkout">
+                  <button type="button" data-testid="checkout-products">
+                    Comprar
+                  </button>
+                </Link>
+              </nav>
+            </div>
           )}
       </div>);
   }
