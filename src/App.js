@@ -18,9 +18,7 @@ class App extends React.Component {
     this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
     this.totalItemsSum = this.totalItemsSum.bind(this);
-    this.cartQuantityAdd = this.cartQuantityAdd.bind(this);
-    this.cartQuantitySub = this.cartQuantitySub.bind(this);
-    this.cartItemDelete = this.cartItemDelete.bind(this);
+    this.updateCartToApp = this.updateCartToApp.bind(this);
   }
 
   handlePrice(price) {
@@ -52,27 +50,7 @@ class App extends React.Component {
     }
   }
 
-  cartQuantityAdd(itemId) {
-    const { quantities } = this.state;
-    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
-    const newQuantities = quantities.filter((p) => p.id !== itemId);
-    const newProduct = { id: itemId, quantity: newQuantity };
-    newQuantities.push(newProduct);
-    this.setState({ quantities: newQuantities });
-  }
-
-  cartQuantitySub(itemId) {
-    const { quantities } = this.state;
-    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity - 1;
-    if (newQuantity > 0) {
-      const newQuantities = quantities.filter((p) => p.id !== itemId);
-      const newProduct = { id: itemId, quantity: newQuantity };
-      newQuantities.push(newProduct);
-      this.setState({ quantities: newQuantities });
-    }
-  }
-
-  cartItemDelete(cartItems, cartQuantities) {
+  updateCartToApp(cartItems, cartQuantities) {
     this.setState({ cart: cartItems, quantities: cartQuantities });
   }
 
@@ -86,9 +64,7 @@ class App extends React.Component {
 
   totalItemsSum() {
     const { quantities } = this.state;
-    const totalSum = quantities
-      .map((qnt) => qnt.quantity)
-      .reduce(((acc, curr) => acc + curr), 0);
+    const totalSum = quantities.reduce(((acc, curr) => acc + curr.quantity), 0);
     return totalSum;
   }
 
@@ -108,9 +84,7 @@ class App extends React.Component {
               cart={ cart }
               quantities={ quantities }
               totalItemsSum={ this.totalItemsSum() }
-              cartQuantityAdd={ this.cartQuantityAdd }
-              cartQuantitySub={ this.cartQuantitySub }
-              cartItemDelete={ this.cartItemDelete }
+              updateCartToApp={ this.updateCartToApp }
               handlePrice={ this.handlePrice }
             />) }
           />
