@@ -10,13 +10,27 @@ class App extends React.Component {
     super();
     this.state = {
       cart: [],
-      price: 0,
       quantities: [],
     };
 
+    this.handlePrice = this.handlePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
     this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
+    this.cartQuantityAdd = this.cartQuantityAdd.bind(this);
+    this.cartQuantitySub = this.cartQuantitySub.bind(this);
+    this.cartItemDelete = this.cartItemDelete.bind(this);
+  }
+
+  handlePrice(price) {
+    if (price.toString().includes('.')) {
+      const splittedPrice = price.toString().split('.');
+      if (splittedPrice[1].length < 2) {
+        return `${splittedPrice[0]},${splittedPrice[1]}0`;
+      }
+      return `${splittedPrice[0]},${splittedPrice[1]}`;
+    }
+    return `${price},00`;
   }
 
   cartAdd(product) {
@@ -37,6 +51,30 @@ class App extends React.Component {
     }
   }
 
+  cartQuantityAdd(itemId) {
+    const { quantities } = this.state;
+    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
+    const newQuantities = quantities.filter((p) => p.id !== itemId);
+    const newProduct = { id: itemId, quantity: newQuantity };
+    newQuantities.push(newProduct);
+    this.setState({ quantities: newQuantities });
+  }
+
+  cartQuantitySub(itemId) {
+    const { quantities } = this.state;
+    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity - 1;
+    if (newQuantity > 0) {
+      const newQuantities = quantities.filter((p) => p.id !== itemId);
+      const newProduct = { id: itemId, quantity: newQuantity };
+      newQuantities.push(newProduct);
+      this.setState({ quantities: newQuantities });
+    }
+  }
+
+  cartItemDelete(cartItems, cartQuantities) {
+    this.setState({ cart: cartItems, quantities: cartQuantities });
+  }
+
   updatePrice(productPrice) {
     const { price } = this.state;
     const priceNumber = parseInt((price * 100), 10) / 100;
@@ -46,7 +84,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { cart, price, quantities } = this.state;
+    const { cart, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
@@ -58,8 +96,11 @@ class App extends React.Component {
             render={ (props) => (<ShoppingCart
               { ...props }
               cart={ cart }
-              totalPrice={ price }
               quantities={ quantities }
+              cartQuantityAdd={ this.cartQuantityAdd }
+              cartQuantitySub={ this.cartQuantitySub }
+              cartItemDelete={ this.cartItemDelete }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
@@ -67,6 +108,7 @@ class App extends React.Component {
             render={ (props) => (<ProductDetails
               { ...props }
               cartAdd={ this.cartAdd }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
@@ -75,6 +117,7 @@ class App extends React.Component {
             render={ (props) => (<ProductList
               { ...props }
               cartAdd={ this.cartAdd }
+              handlePrice={ this.handlePrice }
             />) }
           />
         </Switch>
