@@ -35,10 +35,11 @@ class Checkout extends Component {
   }
 
   submit(e) {
+    const { finishSale } = this.props;
     e.preventDefault();
     const { status } = this.state;
     if (status === 'OK') {
-      this.setState({ submit: true });
+      this.setState({ submit: true }, () => finishSale());
     }
   }
 
@@ -128,39 +129,24 @@ class Checkout extends Component {
 
   complement() {
     return (
-      <input
-        type="text"
-        id="complement"
-        name="complement"
-        placeholder="Complemento"
-      />
+      <input type="text" id="complement" name="complement" placeholder="Complemento" />
     );
   }
 
   num() {
     return (
-      <input
-        type="text"
-        id="num"
-        name="num"
-        placeholder="Número"
-      />
+      <input type="text" id="num" name="num" placeholder="Número" />
     );
   }
 
   city() {
     return (
-      <input
-        type="text"
-        id="city"
-        name="city"
-        placeholder="Cidade"
-      />
+      <input type="text" id="city" name="city" placeholder="Cidade" />
     );
   }
 
   render() {
-    const { cart } = this.props;
+    const { cart, quantities, handlePrice } = this.props;
     const { submit } = this.state;
     if (submit) {
       return (
@@ -168,11 +154,15 @@ class Checkout extends Component {
           <meta http-Equiv="refresh" content="3; URL='/'" />
           <h2>Compra Realizada com Sucesso!!!</h2>
           <p>Volte sempre! :D</p>
-          {localStorage.clear()}
         </div>
       );
     }
-    const total = cart.reduce((acc, { price }) => (acc + price), 0).toFixed(2);
+    const totalPrice = cart.reduce((accumulator, current) => {
+      accumulator += current.price * quantities
+        .find((item) => item.id === current.id).quantity;
+      return accumulator;
+    }, 0);
+    const total = handlePrice(totalPrice);
     return (
       <form onSubmit={ this.submit }>
         <header>
@@ -185,13 +175,17 @@ class Checkout extends Component {
           <div className="review-container">
             <h4>Revise seus Produtos</h4>
             <table cellPadding="10px">
-              {cart.map(({ id, title, price }) => (
-                <tr key={ id }>
-                  <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
-                  <td>{`${title}`}</td>
-                  <td>{`R$${price}`}</td>
-                </tr>
-              ))}
+              {cart.map(({ id, title, price }) => {
+                const { quantity } = quantities.find((item) => item.id === id);
+                return (
+                  <tr key={ id }>
+                    <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
+                    <td>{`${title}`}</td>
+                    <td>{`x ${quantity}`}</td>
+                    <td>{`R$${handlePrice(price * quantity)}`}</td>
+                  </tr>
+                );
+              })}
             </table>
             <h4>
               Total: R$
@@ -245,5 +239,8 @@ class Checkout extends Component {
 
 Checkout.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
+  quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
+  finishSale: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 export default Checkout;
