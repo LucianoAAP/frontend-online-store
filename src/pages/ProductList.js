@@ -47,11 +47,16 @@ class ProductList extends React.Component {
         products: [...biggerToSmall],
         selectPrice: 'bigger',
       });
-    } else {
+    } else if (value === 'smaller') {
       const smallToBigger = products.sort((a, b) => a.price - b.price);
       this.setState({
         products: [...smallToBigger],
         selectPrice: 'smaller',
+      });
+    } else {
+      this.setState({
+        products,
+        selectPrice: 'by-price',
       });
     }
   }
