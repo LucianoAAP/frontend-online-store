@@ -178,13 +178,14 @@ class Checkout extends Component {
               {cart.map(({ id, title, price }) => {
                 const { quantity } = quantities.find((item) => item.id === id);
                 return (
-                  <tr key={ id }>
-                    <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
-                    <td>{`${title}`}</td>
-                    <td>{`x ${quantity}`}</td>
-                    <td>{`R$${handlePrice(price * quantity)}`}</td>
-                  </tr>
-                );
+                  <tbody key={ id }>
+                    <tr>
+                      <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
+                      <td>{`${title}`}</td>
+                      <td>{`x ${quantity}`}</td>
+                      <td>{`R$${handlePrice(price * quantity)}`}</td>
+                    </tr>
+                  </tbody>);
               })}
             </table>
             <h4>
@@ -192,7 +193,7 @@ class Checkout extends Component {
               {total}
             </h4>
           </div>
-          <form className="buyer-info-container">
+          <div className="buyer-info-container">
             <h4>Informações do Comprador</h4>
             <div>
               {this.fullName()}
@@ -205,7 +206,7 @@ class Checkout extends Component {
               {this.num()}
               {this.city()}
             </div>
-          </form>
+          </div>
           <div className="payment-container">
             <h4>Método de Pagamento</h4>
             <div>
