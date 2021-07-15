@@ -4,6 +4,7 @@ import './App.css';
 import ProductList from './pages/ProductList';
 import ShoppingCart from './pages/ShoppingCart';
 import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout/Checkout';
 
 class App extends React.Component {
   constructor() {
@@ -99,6 +100,14 @@ class App extends React.Component {
           <p data-testid="shopping-cart-size">{ this.totalItemsSum() }</p>
         </Link>
         <Switch>
+          <Route
+            path="/checkout"
+            render={ (props) => (<Checkout
+              { ...props }
+              cart={ cart }
+              quantities={ quantities }
+            />) }
+          />
           <Route
             path="/cart"
             render={ (props) => (<ShoppingCart
