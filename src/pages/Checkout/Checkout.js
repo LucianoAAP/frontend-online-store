@@ -168,6 +168,7 @@ class Checkout extends Component {
           <meta http-Equiv="refresh" content="3; URL='/'" />
           <h2>Compra Realizada com Sucesso!!!</h2>
           <p>Volte sempre! :D</p>
+          {localStorage.clear()}
         </div>
       );
     }

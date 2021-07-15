@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import AvaliationCard from './AvaliationCard';
+import EvaluationCard from './EvaluationCard';
 
-class CostumerAvaliation extends Component {
+class CustumerEvaluation extends Component {
   constructor(props) {
     super(props);
     this.setLocalStorage = this.setLocalStorage.bind(this);
     this.getLocalStorage = this.getLocalStorage.bind(this);
     this.updateState = this.updateState.bind(this);
     this.state = {
-      avaliation: {
+      evaluation: {
         email: '',
         description: '',
         rating: 0,
       },
-      avaliationArray: [],
+      evaluationArray: [],
     };
   }
 
@@ -23,22 +23,22 @@ class CostumerAvaliation extends Component {
   }
 
   setLocalStorage() {
-    const { avaliation } = this.state;
+    const { evaluation } = this.state;
     const { title } = this.props;
     const save = JSON.parse(localStorage.getItem(`Product: ${title}`));
     if (save) {
-      localStorage.setItem(`Product: ${title}`, JSON.stringify([...save, avaliation]));
+      localStorage.setItem(`Product: ${title}`, JSON.stringify([...save, evaluation]));
       this.setState({
-        avaliationArray: [...save, avaliation],
+        evaluationArray: [...save, evaluation],
       });
     } else {
-      localStorage.setItem(`Product: ${title}`, JSON.stringify([avaliation]));
+      localStorage.setItem(`Product: ${title}`, JSON.stringify([evaluation]));
       this.setState({
-        avaliationArray: [avaliation],
+        evaluationArray: [evaluation],
       });
     }
     this.setState({
-      avaliation: {
+      evaluation: {
         email: '',
         description: '',
         rating: 0,
@@ -51,7 +51,7 @@ class CostumerAvaliation extends Component {
     const save = JSON.parse(localStorage.getItem(`Product: ${title}`));
     if (save) {
       this.setState({
-        avaliationArray: save,
+        evaluationArray: save,
       });
     }
   }
@@ -59,16 +59,16 @@ class CostumerAvaliation extends Component {
   updateState(event) {
     const { name, value } = event.target;
     this.setState((prevState) => ({
-      avaliation: {
-        ...prevState.avaliation,
+      evaluation: {
+        ...prevState.evaluation,
         [name]: value,
       },
     }));
   }
 
   render() {
-    const { avaliation, avaliationArray } = this.state;
-    const { email, description, rating } = avaliation;
+    const { evaluation, evaluationArray } = this.state;
+    const { email, description, rating } = evaluation;
     return (
       <div>
         <h2>Avaliações:</h2>
@@ -109,9 +109,9 @@ class CostumerAvaliation extends Component {
         <div>
           Todas as avaliações:
           {
-            avaliationArray
-              ? avaliationArray
-                .map((item, idx) => <AvaliationCard key={ idx } avaliation={ item } />)
+            evaluationArray
+              ? evaluationArray
+                .map((item, idx) => <EvaluationCard key={ idx } evaluation={ item } />)
               : null
           }
         </div>
@@ -120,8 +120,8 @@ class CostumerAvaliation extends Component {
   }
 }
 
-CostumerAvaliation.propTypes = {
+CustumerEvaluation.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-export default CostumerAvaliation;
+export default CustumerEvaluation;

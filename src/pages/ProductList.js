@@ -61,7 +61,7 @@ class ProductList extends React.Component {
   }
 
   render() {
-    const { cartAdd } = this.props;
+    const { cartAdd, handlePrice } = this.props;
     const {
       products,
       searchInput,
@@ -111,12 +111,13 @@ class ProductList extends React.Component {
           <div className="product-container">
             {loading
               ? <span>Loading...</span>
-              : products.map((product) => (
+              : products.map((product, index) => (
                 <ProductCard
-                  key={ product.title }
+                  key={ index }
                   product={ product }
                   onClick={ this.handleClick }
                   cartAdd={ cartAdd }
+                  handlePrice={ handlePrice }
                 />
               ))}
           </div>
@@ -128,6 +129,7 @@ class ProductList extends React.Component {
 
 ProductList.propTypes = {
   cartAdd: PropTypes.func.isRequired,
+  handlePrice: PropTypes.func.isRequired,
 };
 
 export default ProductList;
