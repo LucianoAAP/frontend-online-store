@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CustumerEvaluation from '../components/CustumerEvaluation';
-import ShippingStatus from '../components/ShippingStatus';
+import CustumerEvaluation from '../../components/CustumerEvaluation';
+import ShippingStatus from '../../components/ShippingStatus';
 
 class ProductDetails extends React.Component {
   render() {

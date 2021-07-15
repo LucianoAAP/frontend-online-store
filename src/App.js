@@ -1,9 +1,9 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import ProductList from './pages/ProductList';
-import ShoppingCart from './pages/ShoppingCart';
-import ProductDetails from './pages/ProductDetails';
+import ProductList from './pages/ProductList/ProductList';
+import ShoppingCart from './pages/ShoppingCart/ShoppingCart';
+import ProductDetails from './pages/ProductDetails/ProductDetails';
 import Checkout from './pages/Checkout/Checkout';
 
 class App extends React.Component {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getProductsFromCategoryAndQuery } from '../services/api';
-import ProductCard from '../components/ProductCard';
-import CategoriesList from '../components/CategoriesList';
+import { getProductsFromCategoryAndQuery } from '../../services/api';
+import ProductCard from '../../components/ProductCard';
+import CategoriesList from '../../components/CategoriesList';
 
 class ProductList extends React.Component {
   constructor(props) {
