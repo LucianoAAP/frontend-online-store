@@ -31,14 +31,15 @@ class App extends React.Component {
   }
 
   handlePrice(price) {
-    if (price.toString().includes('.')) {
-      const splittedPrice = price.toString().split('.');
+    const fixedPrice = Math.round((price) * 100) / 100;
+    if (fixedPrice.toString().includes('.')) {
+      const splittedPrice = fixedPrice.toString().split('.');
       if (splittedPrice[1].length < 2) {
         return `${splittedPrice[0]},${splittedPrice[1]}0`;
       }
       return `${splittedPrice[0]},${splittedPrice[1]}`;
     }
-    return `${price},00`;
+    return `${fixedPrice},00`;
   }
 
   setLocalStorage(cart, quantities) {
