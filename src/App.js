@@ -22,6 +22,7 @@ class App extends React.Component {
     this.updateCartToApp = this.updateCartToApp.bind(this);
     this.setLocalStorage = this.setLocalStorage.bind(this);
     this.getLocalStorage = this.getLocalStorage.bind(this);
+    this.finishSale = this.finishSale.bind(this);
   }
 
   componentDidMount() {
@@ -92,6 +93,12 @@ class App extends React.Component {
     return totalSum;
   }
 
+  finishSale() {
+    const newCart = [];
+    const newQuantities = [];
+    this.updateCartToApp(newCart, newQuantities);
+  }
+
   render() {
     const { cart, quantities } = this.state;
     return (
@@ -107,6 +114,8 @@ class App extends React.Component {
               { ...props }
               cart={ cart }
               quantities={ quantities }
+              finishSale={ this.finishSale }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
