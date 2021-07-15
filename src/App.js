@@ -17,6 +17,7 @@ class App extends React.Component {
     this.cartAdd = this.cartAdd.bind(this);
     this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
+    this.totalItemsSum = this.totalItemsSum.bind(this);
   }
 
   cartAdd(product) {
@@ -45,12 +46,21 @@ class App extends React.Component {
     this.setState({ price: priceNumberFixed });
   }
 
+  totalItemsSum() {
+    const { quantities } = this.state;
+    const totalSum = quantities
+      .map((qnt) => qnt.quantity)
+      .reduce(((acc, curr) => acc + curr), 0);
+    return totalSum;
+  }
+
   render() {
     const { cart, price, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
           <img src="https://img.icons8.com/ios/50/000000/shopping-cart.png" alt="carrinho" />
+          <p data-testid="shopping-cart-size">{ this.totalItemsSum() }</p>
         </Link>
         <Switch>
           <Route
@@ -60,6 +70,7 @@ class App extends React.Component {
               cart={ cart }
               totalPrice={ price }
               quantities={ quantities }
+              totalItemsSum={ this.totalItemsSum() }
             />) }
           />
           <Route
