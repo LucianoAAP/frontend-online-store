@@ -4,6 +4,7 @@ import './App.css';
 import ProductList from './pages/ProductList';
 import ShoppingCart from './pages/ShoppingCart';
 import ProductDetails from './pages/ProductDetails';
+import Checkout from './pages/Checkout/Checkout';
 
 class App extends React.Component {
   constructor() {
@@ -53,6 +54,15 @@ class App extends React.Component {
           <img src="https://img.icons8.com/ios/50/000000/shopping-cart.png" alt="carrinho" />
         </Link>
         <Switch>
+          <Route
+            path="/checkout"
+            render={ (props) => (<Checkout
+              { ...props }
+              cart={ cart }
+              totalPrice={ price }
+              quantities={ quantities }
+            />) }
+          />
           <Route
             path="/cart"
             render={ (props) => (<ShoppingCart

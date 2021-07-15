@@ -141,8 +141,19 @@ class ShoppingCart extends React.Component {
                   { quantities.find((qty) => qty.id === item.id).quantity }
                 </div>
               </div>
-            </li>))}
+            </li>
+          ))}
         <h2>{`R$${price}`}</h2>
+        {cartItems.length > 0
+          && (
+            <nav>
+              <Link to="/checkout">
+                <button type="button" data-testid="checkout-products">
+                  Comprar
+                </button>
+              </Link>
+            </nav>
+          )}
       </div>);
   }
 }
