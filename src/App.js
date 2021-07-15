@@ -17,9 +17,16 @@ class App extends React.Component {
     this.cartAdd = this.cartAdd.bind(this);
     this.updatePrice = this.updatePrice.bind(this);
     this.cartAdd = this.cartAdd.bind(this);
-    this.cartQuantityAdd = this.cartQuantityAdd.bind(this);
-    this.cartQuantitySub = this.cartQuantitySub.bind(this);
-    this.cartItemDelete = this.cartItemDelete.bind(this);
+    this.totalItemsSum = this.totalItemsSum.bind(this);
+    this.updateCartToApp = this.updateCartToApp.bind(this);
+    this.setLocalStorage = this.setLocalStorage.bind(this);
+    this.getLocalStorage = this.getLocalStorage.bind(this);
+  }
+
+  componentDidMount() {
+    if (JSON.parse(localStorage.getItem('quantities'))) {
+      this.getLocalStorage();
+    }
   }
 
   handlePrice(price) {
@@ -33,6 +40,17 @@ class App extends React.Component {
     return `${price},00`;
   }
 
+  setLocalStorage(cart, quantities) {
+    localStorage.setItem('cart', JSON.stringify(cart));
+    localStorage.setItem('quantities', JSON.stringify(quantities));
+  }
+
+  getLocalStorage() {
+    const getCart = localStorage.getItem('cart');
+    const getQuantities = JSON.parse(localStorage.getItem('quantities'));
+    this.setState({ cart: getCart, quantities: getQuantities });
+  }
+
   cartAdd(product) {
     const { cart, quantities } = this.state;
     if (quantities.some((p) => p.id === product.id)) {
@@ -40,6 +58,7 @@ class App extends React.Component {
       const newQuantities = quantities.filter((p) => p.id !== product.id);
       const newProduct = { id: product.id, quantity: newQuantity };
       newQuantities.push(newProduct);
+      this.setLocalStorage(cart, newQuantities);
       this.setState({ quantities: newQuantities });
     } else {
       const newCart = cart.map((item) => item);
@@ -47,31 +66,13 @@ class App extends React.Component {
       const newQuantities = quantities.map((item) => item);
       const newQuantity = { id: product.id, quantity: 1 };
       newQuantities.push(newQuantity);
+      this.setLocalStorage(newCart, newQuantities);
       this.setState({ cart: newCart, quantities: newQuantities });
     }
   }
 
-  cartQuantityAdd(itemId) {
-    const { quantities } = this.state;
-    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
-    const newQuantities = quantities.filter((p) => p.id !== itemId);
-    const newProduct = { id: itemId, quantity: newQuantity };
-    newQuantities.push(newProduct);
-    this.setState({ quantities: newQuantities });
-  }
-
-  cartQuantitySub(itemId) {
-    const { quantities } = this.state;
-    const newQuantity = quantities.find((qty) => qty.id === itemId).quantity - 1;
-    if (newQuantity > 0) {
-      const newQuantities = quantities.filter((p) => p.id !== itemId);
-      const newProduct = { id: itemId, quantity: newQuantity };
-      newQuantities.push(newProduct);
-      this.setState({ quantities: newQuantities });
-    }
-  }
-
-  cartItemDelete(cartItems, cartQuantities) {
+  updateCartToApp(cartItems, cartQuantities) {
+    this.setLocalStorage(cartItems, cartQuantities);
     this.setState({ cart: cartItems, quantities: cartQuantities });
   }
 
@@ -83,12 +84,19 @@ class App extends React.Component {
     this.setState({ price: priceNumberFixed });
   }
 
+  totalItemsSum() {
+    const { quantities } = this.state;
+    const totalSum = quantities.reduce(((acc, curr) => acc + curr.quantity), 0);
+    return totalSum;
+  }
+
   render() {
     const { cart, quantities } = this.state;
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
           <img src="https://img.icons8.com/ios/50/000000/shopping-cart.png" alt="carrinho" />
+          <p data-testid="shopping-cart-size">{ this.totalItemsSum() }</p>
         </Link>
         <Switch>
           <Route
@@ -97,9 +105,8 @@ class App extends React.Component {
               { ...props }
               cart={ cart }
               quantities={ quantities }
-              cartQuantityAdd={ this.cartQuantityAdd }
-              cartQuantitySub={ this.cartQuantitySub }
-              cartItemDelete={ this.cartItemDelete }
+              totalItemsSum={ this.totalItemsSum() }
+              updateCartToApp={ this.updateCartToApp }
               handlePrice={ this.handlePrice }
             />) }
           />

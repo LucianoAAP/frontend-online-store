@@ -22,16 +22,19 @@ class ShoppingCart extends React.Component {
   }
 
   handlePlusChange(itemId) {
-    const { quantities } = this.state;
+    const { updateCartToApp } = this.props;
+    const { cartItems, quantities } = this.state;
     const newQuantity = quantities.find((qty) => qty.id === itemId).quantity + 1;
     const newQuantities = quantities.filter((p) => p.id !== itemId);
     const newProduct = { id: itemId, quantity: newQuantity };
     newQuantities.push(newProduct);
     this.setState({ quantities: newQuantities });
+    updateCartToApp(cartItems, newQuantities);
   }
 
   handleSubtractChange(itemId) {
-    const { quantities } = this.state;
+    const { updateCartToApp } = this.props;
+    const { cartItems, quantities } = this.state;
     const newQuantity = quantities.find((qty) => qty.id === itemId).quantity - 1;
     if (newQuantity === 0) {
       this.deleteCartItem(itemId);
@@ -40,6 +43,7 @@ class ShoppingCart extends React.Component {
       const newProduct = { id: itemId, quantity: newQuantity };
       newQuantities.push(newProduct);
       this.setState({ quantities: newQuantities });
+      updateCartToApp(cartItems, newQuantities);
     }
   }
 
@@ -60,17 +64,17 @@ class ShoppingCart extends React.Component {
   }
 
   deleteCartItem(id) {
-    const { cartItemDelete } = this.props;
+    const { updateCartToApp } = this.props;
     const { cartItems, quantities } = this.state;
     const newCart = cartItems.filter((item) => item.id !== id);
     const newQuantities = quantities.filter((item) => item.id !== id);
     this.setState({ cartItems: newCart, quantities: newQuantities });
-    cartItemDelete(newCart, newQuantities);
+    updateCartToApp(newCart, newQuantities);
   }
 
   render() {
     const { cartItems, quantities } = this.state;
-    const { cartQuantityAdd, cartQuantitySub, handlePrice } = this.props;
+    const { handlePrice } = this.props;
     const totalPrice = handlePrice(this.handleTotalPrice());
     return (
       <div>
@@ -102,10 +106,7 @@ class ShoppingCart extends React.Component {
                 <button
                   type="button"
                   data-testid="product-decrease-quantity"
-                  onClick={ () => {
-                    this.handleSubtractChange(item.id);
-                    cartQuantitySub(item.id);
-                  } }
+                  onClick={ () => this.handleSubtractChange(item.id) }
                 >
                   -
                 </button>
@@ -113,10 +114,7 @@ class ShoppingCart extends React.Component {
                 <button
                   type="button"
                   data-testid="product-increase-quantity"
-                  onClick={ () => {
-                    this.handlePlusChange(item.id);
-                    cartQuantityAdd(item.id);
-                  } }
+                  onClick={ () => this.handlePlusChange(item.id) }
                 >
                   +
                 </button>
@@ -133,9 +131,7 @@ class ShoppingCart extends React.Component {
 ShoppingCart.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
   quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
-  cartQuantityAdd: PropTypes.func.isRequired,
-  cartQuantitySub: PropTypes.func.isRequired,
-  cartItemDelete: PropTypes.func.isRequired,
+  updateCartToApp: PropTypes.func.isRequired,
   handlePrice: PropTypes.func.isRequired,
 };
 
