@@ -56,12 +56,16 @@ class App extends React.Component {
   cartAdd(product) {
     const { cart, quantities } = this.state;
     if (quantities.some((p) => p.id === product.id)) {
-      const newQuantity = quantities.find((p) => p.id === product.id).quantity + 1;
-      const newQuantities = quantities.filter((p) => p.id !== product.id);
-      const newProduct = { id: product.id, quantity: newQuantity };
-      newQuantities.push(newProduct);
-      this.setLocalStorage(cart, newQuantities);
-      this.setState({ quantities: newQuantities });
+      const cartProduct = cart.find((item) => item.id === product.id);
+      const itemQuantity = quantities.find((p) => p.id === product.id);
+      if (itemQuantity.quantity < cartProduct.available_quantity) {
+        const newQuantity = itemQuantity.quantity + 1;
+        const newQuantities = quantities.filter((p) => p.id !== product.id);
+        const newProduct = { id: product.id, quantity: newQuantity };
+        newQuantities.push(newProduct);
+        this.setLocalStorage(cart, newQuantities);
+        this.setState({ quantities: newQuantities });
+      }
     } else {
       const newCart = cart.map((item) => item);
       newCart.push(product);
