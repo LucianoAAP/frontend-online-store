@@ -140,7 +140,9 @@ class ShoppingCart extends React.Component {
                       >
                         +
                       </button>
-                      <span className="price-span">{ handlePrice(item.price * quantity) }</span>
+                      <span className="price-span">
+                        { handlePrice(item.price * quantity) }
+                      </span>
                     </div>
                   </li>
                 );
