@@ -17,12 +17,14 @@ class ProductList extends React.Component {
       productRedirection: {},
       category: '',
       loading: false,
+      selectPrice: '',
     };
     this.inputSearchChange = this.inputSearchChange.bind(this);
     this.handleClick = this.handleClick.bind(this);
     this.stateSetting = this.stateSetting.bind(this);
     this.searchButton = this.searchButton.bind(this);
     this.updateCategory = this.updateCategory.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
   async componentDidMount() {
@@ -34,6 +36,31 @@ class ProductList extends React.Component {
 
   handleClick(product) {
     this.setState({ shouldRedirect: true, productRedirection: product });
+  }
+
+  handleSelectChange(e) {
+    const { products } = this.state;
+    const { value } = e.target;
+    this.setState({ selectPrice: value });
+
+    if (value === 'bigger') {
+      const biggerToSmall = products.sort((a, b) => b.price - a.price);
+      this.setState({
+        products: [...biggerToSmall],
+        selectPrice: 'bigger',
+      });
+    } else if (value === 'smaller') {
+      const smallToBigger = products.sort((a, b) => a.price - b.price);
+      this.setState({
+        products: [...smallToBigger],
+        selectPrice: 'smaller',
+      });
+    } else {
+      this.setState({
+        products,
+        selectPrice: 'by-price',
+      });
+    }
   }
 
   stateSetting(filteredValue) {
@@ -70,6 +97,7 @@ class ProductList extends React.Component {
       loading,
       shouldRedirect,
       productRedirection,
+      selectPrice,
     } = this.state;
 
     if (shouldRedirect) {
@@ -108,6 +136,14 @@ class ProductList extends React.Component {
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
+        <select
+          onChange={ this.handleSelectChange }
+          value={ selectPrice }
+        >
+          <option value="by-price">Ordenar por preço:</option>
+          <option value="bigger">Maior preço</option>
+          <option value="smaller">Menor preço</option>
+        </select>
         <div className="main-container">
           <CategoriesList callback={ this.updateCategory } />
           <div className="product-container">
