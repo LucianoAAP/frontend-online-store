@@ -63,15 +63,9 @@ class ProductList extends React.Component {
     }
   }
 
-  stateSetting(filteredValue) {
-    this.setState({ products: filteredValue });
-  }
-
-  inputSearchChange(event) {
-    const { value } = event.target;
-    this.setState({
-      searchInput: value,
-    });
+  updateCategory(event) {
+    const { id } = event.target;
+    this.setState({ category: id, loading: true }, () => this.searchButton());
   }
 
   async searchButton() {
@@ -84,9 +78,15 @@ class ProductList extends React.Component {
     });
   }
 
-  updateCategory(event) {
-    const { id } = event.target;
-    this.setState({ category: id, loading: true }, () => this.searchButton());
+  inputSearchChange(event) {
+    const { value } = event.target;
+    this.setState({
+      searchInput: value,
+    });
+  }
+
+  stateSetting(filteredValue) {
+    this.setState({ products: filteredValue });
   }
 
   render() {
