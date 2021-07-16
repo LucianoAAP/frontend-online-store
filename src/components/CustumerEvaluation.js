@@ -70,18 +70,34 @@ class CustumerEvaluation extends Component {
     const { evaluation, evaluationArray } = this.state;
     const { email, description, rating } = evaluation;
     return (
-      <div>
-        <h2>Avaliações:</h2>
+      <div className="rating-container">
+        {/* <h2>Avaliações:</h2> */}
         <form>
           <h3>Sua Avaliação:</h3>
-          <input
-            type="text"
-            name="email"
-            value={ email }
-            onChange={ this.updateState }
-            placeholder="Coloque seu Email"
-            required
-          />
+          <div>
+            <input
+              type="text"
+              name="email"
+              value={ email }
+              onChange={ this.updateState }
+              placeholder="Coloque seu Email"
+              className="put-email"
+              required
+            />
+            <div className="grade-div">
+              <span>Nota: </span>
+              <input
+                type="number"
+                name="rating"
+                value={ rating }
+                onChange={ this.updateState }
+                min={ 0 }
+                max={ 5 }
+                className="put-grade"
+                required
+              />
+            </div>
+          </div>
           <textarea
             data-testid="product-detail-evaluation"
             type="text"
@@ -89,15 +105,7 @@ class CustumerEvaluation extends Component {
             value={ description }
             onChange={ this.updateState }
             placeholder="Opcional: Nos diga sua opinião."
-          />
-          <input
-            type="number"
-            name="rating"
-            value={ rating }
-            onChange={ this.updateState }
-            min={ 0 }
-            max={ 5 }
-            required
+            className="put-evaluation"
           />
           <button
             type="button"
@@ -106,7 +114,7 @@ class CustumerEvaluation extends Component {
             Enviar Avaliação
           </button>
         </form>
-        <div>
+        <div className="all-evalutations">
           Todas as avaliações:
           {
             evaluationArray

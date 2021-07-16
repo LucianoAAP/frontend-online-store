@@ -1,9 +1,11 @@
 import React from 'react';
 import { Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getProductsFromCategoryAndQuery } from '../services/api';
-import ProductCard from '../components/ProductCard';
-import CategoriesList from '../components/CategoriesList';
+import { getProductsFromCategoryAndQuery } from '../../services/api';
+import ProductCard from '../../components/ProductCard';
+import CategoriesList from '../../components/CategoriesList';
+import Spinner from '../../img/loading.gif';
+import './productList.css';
 
 class ProductList extends React.Component {
   constructor(props) {
@@ -111,7 +113,7 @@ class ProductList extends React.Component {
 
     return (
       <div>
-        <form>
+        <form className="search-container">
           <label htmlFor="searchProduct">
             <input
               type="text"
@@ -130,23 +132,23 @@ class ProductList extends React.Component {
           >
             Procurar
           </button>
-          <p data-testid="home-initial-message">
-            Digite algum termo de pesquisa ou escolha uma categoria.
-          </p>
-          <select
-            onChange={ this.handleSelectChange }
-            value={ selectPrice }
-          >
-            <option value="by-price">Ordenar por preço:</option>
-            <option value="bigger">Maior preço</option>
-            <option value="smaller">Menor preço</option>
-          </select>
         </form>
+        <p data-testid="home-initial-message">
+          Digite algum termo de pesquisa ou escolha uma categoria.
+        </p>
+        <select
+          onChange={ this.handleSelectChange }
+          value={ selectPrice }
+        >
+          <option value="by-price">Ordenar por preço:</option>
+          <option value="bigger">Maior preço</option>
+          <option value="smaller">Menor preço</option>
+        </select>
         <div className="main-container">
           <CategoriesList callback={ this.updateCategory } />
           <div className="product-container">
             {loading
-              ? <span>Loading...</span>
+              ? <span><img src={ Spinner } alt="spinner" width="300" /></span>
               : products.map((product, index) => (
                 <ProductCard
                   key={ index }

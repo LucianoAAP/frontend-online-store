@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './checkout.css';
 import PropTypes from 'prop-types';
+import Spinner from '../../img/spinner.jpg';
 
 class Checkout extends Component {
   constructor(props) {
@@ -154,6 +155,7 @@ class Checkout extends Component {
           <meta http-Equiv="refresh" content="3; URL='/'" />
           <h2>Compra Realizada com Sucesso!!!</h2>
           <p>Volte sempre! :D</p>
+          <img src={ Spinner } alt="spinner" width="300" />
         </div>
       );
     }
@@ -234,7 +236,6 @@ class Checkout extends Component {
     );
   }
 }
-
 Checkout.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
   quantities: PropTypes.arrayOf(PropTypes.object).isRequired,

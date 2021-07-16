@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import './shoppingCart.css';
 
 class ShoppingCart extends React.Component {
   constructor(props) {
@@ -95,66 +96,83 @@ class ShoppingCart extends React.Component {
     return (
       <div>
         <Link to="/">
-          <img src="https://img.icons8.com/ios/50/000000/back--v1.png" alt="voltar" />
+          <img src="https://img.icons8.com/ios/50/000000/left2.png" alt="voltar" />
         </Link>
-        <h1>Carrinho de Compras</h1>
-        {cartItems.length === 0
-          ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
-          : cartItems.map((item) => {
-            const { quantity } = quantities.find((qty) => qty.id === item.id);
-            return (
-              <li
-                key={ item.id }
-                data-testid="shopping-cart-product-name"
-                className={ item.id }
-              >
-                <div>{ handlePrice(item.price * quantity) }</div>
+        <div className="cart-container">
+          <h1>Carrinho de Compras</h1>
+          <ul className="items-list">
+            {cartItems.length === 0
+              ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+              : cartItems.map((item) => {
+                const { quantity } = quantities.find((qty) => qty.id === item.id);
+                return (
+                  <li
+                    key={ item.id }
+                    data-testid="shopping-cart-product-name"
+                    className={ item.id }
+                  >
+                    <button
+                      type="button"
+                      onClick={ () => {
+                        this.deleteCartItem(item.id);
+                      } }
+                    >
+                      X
+                    </button>
+                    { `${item.title}` }
+                    <div>
+                      <button
+                        type="button"
+                        data-testid="product-decrease-quantity"
+                        onClick={ () => this.handleSubtractChange(item.id) }
+                      >
+                        -
+                      </button>
+                      {' '}
+                      <span data-testid="shopping-cart-product-quantity">
+                        {` ( ${quantity} )`}
+                      </span>
+                      {' '}
+                      <button
+                        type="button"
+                        data-testid="product-increase-quantity"
+                        onClick={ () => this.handlePlusChange(item.id) }
+                      >
+                        +
+                      </button>
+                      <span className="price-span">
+                        { handlePrice(item.price * quantity) }
+                      </span>
+                    </div>
+                  </li>
+                );
+              })}
+          </ul>
+          <h2>{ totalPrice }</h2>
+          {cartItems.length > 0
+            && (
+              <div>
                 <button
                   type="button"
-                  onClick={ () => {
-                    this.deleteCartItem(item.id);
-                  } }
+                  onClick={ this.deleteCart }
                 >
-                  X
+                  Limpar Carrinho
                 </button>
-                { `${item.title}` }
-                <div>
-                  <button
-                    type="button"
-                    data-testid="product-decrease-quantity"
-                    onClick={ () => this.handleSubtractChange(item.id) }
-                  >
-                    -
-                  </button>
-                  {' '}
-                  <button
-                    type="button"
-                    data-testid="product-increase-quantity"
-                    onClick={ () => this.handlePlusChange(item.id) }
-                  >
-                    +
-                  </button>
-                  <div data-testid="shopping-cart-product-quantity">
-                    { quantity }
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        <h2>{`${totalPrice}`}</h2>
-        {cartItems.length > 0
-          && (
-            <div>
-              <button type="button" onClick={ this.deleteCart }>Limpar Carrinho</button>
-              <nav>
-                <Link to="/checkout">
-                  <button type="button" data-testid="checkout-products">
-                    Comprar
-                  </button>
-                </Link>
-              </nav>
-            </div>
-          )}
+                {' '}
+                <nav>
+                  <Link to="/checkout">
+                    <button
+                      type="button"
+                      data-testid="checkout-products"
+                      className="buy-btn"
+                    >
+                      Finalizar Compra
+                    </button>
+                  </Link>
+                </nav>
+              </div>
+            )}
+        </div>
       </div>);
   }
 }

@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
-import ProductList from './pages/ProductList';
-import ShoppingCart from './pages/ShoppingCart';
-import ProductDetails from './pages/ProductDetails';
+import ProductList from './pages/ProductList/ProductList';
+import ShoppingCart from './pages/ShoppingCart/ShoppingCart';
+import ProductDetails from './pages/ProductDetails/ProductDetails';
 import Checkout from './pages/Checkout/Checkout';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
 class App extends React.Component {
   constructor() {
@@ -34,7 +36,7 @@ class App extends React.Component {
     if (fixedPrice.toString().includes('.')) {
       const splittedPrice = fixedPrice.toString().split('.');
       if (splittedPrice[1].length < 2) {
-        return `${splittedPrice[0]},${splittedPrice[1]}0`;
+        return `R$${splittedPrice[0]},${splittedPrice[1]}0`;
       }
       return `R$${splittedPrice[0]},${splittedPrice[1]}`;
     }
@@ -108,8 +110,7 @@ class App extends React.Component {
     return (
       <BrowserRouter>
         <Link to="/cart" data-testid="shopping-cart-button">
-          <img src="https://img.icons8.com/ios/50/000000/shopping-cart.png" alt="carrinho" />
-          <p data-testid="shopping-cart-size">{ this.totalItemsSum() }</p>
+          <Header qnt={ this.totalItemsSum() } />
         </Link>
         <Switch>
           <Route
@@ -149,6 +150,7 @@ class App extends React.Component {
             />) }
           />
         </Switch>
+        <Footer />
       </BrowserRouter>
     );
   }
