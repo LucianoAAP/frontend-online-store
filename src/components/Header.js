@@ -19,7 +19,7 @@ class Header extends Component {
 }
 
 Header.propTypes = {
-  qnt: PropTypes.string.isRequired,
+  qnt: PropTypes.number.isRequired,
 };
 
 export default Header;

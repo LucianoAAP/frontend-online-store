@@ -24,23 +24,23 @@ class App extends React.Component {
     this.updateCartToApp = this.updateCartToApp.bind(this);
     this.setLocalStorage = this.setLocalStorage.bind(this);
     this.getLocalStorage = this.getLocalStorage.bind(this);
+    this.finishSale = this.finishSale.bind(this);
   }
 
   componentDidMount() {
-    if (JSON.parse(localStorage.getItem('quantities'))) {
-      this.getLocalStorage();
-    }
+    this.getLocalStorage();
   }
 
   handlePrice(price) {
-    if (price.toString().includes('.')) {
-      const splittedPrice = price.toString().split('.');
+    const fixedPrice = Math.round((price) * 100) / 100;
+    if (fixedPrice.toString().includes('.')) {
+      const splittedPrice = fixedPrice.toString().split('.');
       if (splittedPrice[1].length < 2) {
         return `${splittedPrice[0]},${splittedPrice[1]}0`;
       }
-      return `${splittedPrice[0]},${splittedPrice[1]}`;
+      return `R$${splittedPrice[0]},${splittedPrice[1]}`;
     }
-    return `${price},00`;
+    return `R$${fixedPrice},00`;
   }
 
   setLocalStorage(cart, quantities) {
@@ -49,20 +49,26 @@ class App extends React.Component {
   }
 
   getLocalStorage() {
-    const getCart = JSON.parse(localStorage.getItem('cart'));
-    const getQuantities = JSON.parse(localStorage.getItem('quantities'));
-    this.setState({ cart: getCart, quantities: getQuantities });
+    if (JSON.parse(localStorage.getItem('quantities'))) {
+      const getCart = JSON.parse(localStorage.getItem('cart'));
+      const getQuantities = JSON.parse(localStorage.getItem('quantities'));
+      this.setState({ cart: getCart, quantities: getQuantities });
+    }
   }
 
   cartAdd(product) {
     const { cart, quantities } = this.state;
     if (quantities.some((p) => p.id === product.id)) {
-      const newQuantity = quantities.find((p) => p.id === product.id).quantity + 1;
-      const newQuantities = quantities.filter((p) => p.id !== product.id);
-      const newProduct = { id: product.id, quantity: newQuantity };
-      newQuantities.push(newProduct);
-      this.setLocalStorage(cart, newQuantities);
-      this.setState({ quantities: newQuantities });
+      const cartProduct = cart.find((item) => item.id === product.id);
+      const itemQuantity = quantities.find((p) => p.id === product.id);
+      if (itemQuantity.quantity < cartProduct.available_quantity) {
+        const newQuantity = itemQuantity.quantity + 1;
+        const newQuantities = quantities.filter((p) => p.id !== product.id);
+        const newProduct = { id: product.id, quantity: newQuantity };
+        newQuantities.push(newProduct);
+        this.setLocalStorage(cart, newQuantities);
+        this.setState({ quantities: newQuantities });
+      }
     } else {
       const newCart = cart.map((item) => item);
       newCart.push(product);
@@ -93,6 +99,12 @@ class App extends React.Component {
     return totalSum;
   }
 
+  finishSale() {
+    const newCart = [];
+    const newQuantities = [];
+    this.updateCartToApp(newCart, newQuantities);
+  }
+
   render() {
     const { cart, quantities } = this.state;
     return (
@@ -107,14 +119,14 @@ class App extends React.Component {
               { ...props }
               cart={ cart }
               quantities={ quantities }
+              finishSale={ this.finishSale }
+              handlePrice={ this.handlePrice }
             />) }
           />
           <Route
             path="/cart"
             render={ (props) => (<ShoppingCart
               { ...props }
-              cart={ cart }
-              quantities={ quantities }
               totalItemsSum={ this.totalItemsSum() }
               updateCartToApp={ this.updateCartToApp }
               handlePrice={ this.handlePrice }

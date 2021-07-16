@@ -93,7 +93,7 @@ class CustumerEvaluation extends Component {
                 onChange={ this.updateState }
                 min={ 0 }
                 max={ 5 }
-                iclassName="put-grade"
+                className="put-grade"
                 required
               />
             </div>
