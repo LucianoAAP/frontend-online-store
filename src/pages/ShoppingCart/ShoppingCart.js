@@ -113,6 +113,7 @@ class ShoppingCart extends React.Component {
                   >
                     <button
                       type="button"
+                      className="rem-btn"
                       onClick={ () => {
                         this.deleteCartItem(item.id);
                       } }
@@ -123,6 +124,7 @@ class ShoppingCart extends React.Component {
                     <div>
                       <button
                         type="button"
+                        className="less-btn"
                         data-testid="product-decrease-quantity"
                         onClick={ () => this.handleSubtractChange(item.id) }
                       >
@@ -135,6 +137,7 @@ class ShoppingCart extends React.Component {
                       {' '}
                       <button
                         type="button"
+                        className="add-btn"
                         data-testid="product-increase-quantity"
                         onClick={ () => this.handlePlusChange(item.id) }
                       >
@@ -152,14 +155,14 @@ class ShoppingCart extends React.Component {
           {cartItems.length > 0
             && (
               <div>
-                <button
-                  type="button"
-                  onClick={ this.deleteCart }
-                >
-                  Limpar Carrinho
-                </button>
-                {' '}
                 <nav>
+                  <button
+                    type="button"
+                    onClick={ this.deleteCart }
+                    className="clean-cart-btn"
+                  >
+                    Limpar Carrinho
+                  </button>
                   <Link to="/checkout">
                     <button
                       type="button"
