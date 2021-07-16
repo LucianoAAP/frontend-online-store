@@ -36,7 +36,7 @@ class App extends React.Component {
     if (fixedPrice.toString().includes('.')) {
       const splittedPrice = fixedPrice.toString().split('.');
       if (splittedPrice[1].length < 2) {
-        return `${splittedPrice[0]},${splittedPrice[1]}0`;
+        return `R$${splittedPrice[0]},${splittedPrice[1]}0`;
       }
       return `R$${splittedPrice[0]},${splittedPrice[1]}`;
     }

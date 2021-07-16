@@ -111,7 +111,6 @@ class ShoppingCart extends React.Component {
                     data-testid="shopping-cart-product-name"
                     className={ item.id }
                   >
-                    <div>{ handlePrice(item.price * quantity) }</div>
                     <button
                       type="button"
                       onClick={ () => {
@@ -131,7 +130,7 @@ class ShoppingCart extends React.Component {
                       </button>
                       {' '}
                       <span data-testid="shopping-cart-product-quantity">
-                        {` ( ${quantities.find((qty) => qty.id === item.id).quantity} )`}
+                        {` ( ${quantity} )`}
                       </span>
                       {' '}
                       <button
@@ -141,35 +140,35 @@ class ShoppingCart extends React.Component {
                       >
                         +
                       </button>
-                      <span className="price-span">{ ` R$${item.price} ` }</span>
-                      <div data-testid="shopping-cart-product-quantity">
-                        { quantity }
-                      </div>
+                      <span className="price-span">{ handlePrice(item.price * quantity) }</span>
                     </div>
                   </li>
                 );
               })}
           </ul>
-          <h2>{`R$${totalPrice}`}</h2>
+          <h2>{ totalPrice }</h2>
           {cartItems.length > 0
             && (
-              <nav>
-                <Link to="/checkout">
-                  <button
-                    type="button"
-                    onClick={ this.deleteCart }
-                  >
-                    Limpar Carrinho
-                  </button>
-                  <button
-                    type="button"
-                    data-testid="checkout-products"
-                    className="buy-btn"
-                  >
-                    Finalizar Compra
-                  </button>
-                </Link>
-              </nav>
+              <div>
+                <button
+                  type="button"
+                  onClick={ this.deleteCart }
+                >
+                  Limpar Carrinho
+                </button>
+                {' '}
+                <nav>
+                  <Link to="/checkout">
+                    <button
+                      type="button"
+                      data-testid="checkout-products"
+                      className="buy-btn"
+                    >
+                      Finalizar Compra
+                    </button>
+                  </Link>
+                </nav>
+              </div>
             )}
         </div>
       </div>);
