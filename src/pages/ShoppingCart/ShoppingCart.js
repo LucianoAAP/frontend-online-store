@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import './shoppingCart.css';
 
 class ShoppingCart extends React.Component {
   constructor(props) {
@@ -79,62 +80,68 @@ class ShoppingCart extends React.Component {
     return (
       <div>
         <Link to="/">
-          <img src="https://img.icons8.com/ios/50/000000/back--v1.png" alt="voltar" />
+          <img src="https://img.icons8.com/ios/50/000000/left2.png" alt="voltar" />
         </Link>
-        <h1>Carrinho de Compras</h1>
-        {cartItems.length === 0
-          ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
-          : cartItems.map((item) => (
-            <li
-              key={ item.id }
-              data-testid="shopping-cart-product-name"
-              className={ item.id }
-            >
-              <div>{ item.price }</div>
-              <button
-                type="button"
-                onClick={ () => {
-                  this.deleteCartItem(item.id);
-                } }
-              >
-                X
-              </button>
-              {' '}
-              { item.title }
-              {' '}
-              <div>
-                <button
-                  type="button"
-                  data-testid="product-decrease-quantity"
-                  onClick={ () => this.handleSubtractChange(item.id) }
+        <div className="cart-container">
+          <h1>Carrinho de Compras</h1>
+          <ul className="items-list">
+            {cartItems.length === 0
+              ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
+              : cartItems.map((item) => (
+                <li
+                  key={ item.id }
+                  data-testid="shopping-cart-product-name"
+                  className={ item.id }
                 >
-                  -
-                </button>
-                {' '}
-                <button
-                  type="button"
-                  data-testid="product-increase-quantity"
-                  onClick={ () => this.handlePlusChange(item.id) }
-                >
-                  +
-                </button>
-                <div data-testid="shopping-cart-product-quantity">
-                  { quantities.find((qty) => qty.id === item.id).quantity }
-                </div>
-              </div>
-            </li>
-          ))}
-        <h2>{`R$${totalPrice}`}</h2>
-        {cartItems.length > 0
-          && (
-            <nav>
-              <Link to="/checkout">
-                <button type="button" data-testid="checkout-products">
-                  Comprar
-                </button>
-              </Link>
-            </nav>
-          )}
+                  <button
+                    type="button"
+                    onClick={ () => {
+                      this.deleteCartItem(item.id);
+                    } }
+                  >
+                    X
+                  </button>
+                  { item.title }
+                  <div>
+                    <button
+                      type="button"
+                      data-testid="product-decrease-quantity"
+                      onClick={ () => this.handleSubtractChange(item.id) }
+                    >
+                      -
+                    </button>
+                    <span data-testid="shopping-cart-product-quantity">
+                      {` ( ${quantities.find((qty) => qty.id === item.id).quantity} )`}
+                    </span>
+                    {' '}
+                    <button
+                      type="button"
+                      data-testid="product-increase-quantity"
+                      onClick={ () => this.handlePlusChange(item.id) }
+                    >
+                      +
+                    </button>
+                    <span className="price-span">{ ` R$${item.price} ` }</span>
+                  </div>
+                </li>
+              ))}
+          </ul>
+          <h2>{`R$${totalPrice}`}</h2>
+          {cartItems.length > 0
+            && (
+              <nav>
+                <Link to="/checkout">
+                  <button
+                    type="button"
+                    data-testid="checkout-products"
+                    className="buy-btn"
+                  >
+                    Finalizar Compra
+                  </button>
+                </Link>
+              </nav>
+            )}
+        </div>
       </div>);
   }
 }

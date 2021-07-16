@@ -10,22 +10,24 @@ class ProductCard extends Component {
 
     return (
       <div data-testid="product" className="product-card">
-        <h4>{ title }</h4>
-        <img src={ thumbnail } alt={ title } />
-        <p>{ newPrice }</p>
-        <ShippingStatus status={ shipping.free_shipping } />
         <button
           type="button"
           data-testid="product-detail-link"
           onClick={ () => onClick(product) }
+          className="details-button"
         >
-          Ver Detalhes
+          <h4>{ title }</h4>
+          <img src={ thumbnail } alt={ title } />
+          <p>{ newPrice }</p>
+          <ShippingStatus status={ shipping.free_shipping } />
         </button>
         <button
           type="button"
           data-testid="product-add-to-cart"
           onClick={ () => cartAdd(product) }
+          className="btn-addtocard"
         >
+          <img src="https://img.icons8.com/color/80/000000/add-shopping-cart--v1.png" alt="cart" />
           Adicionar ao Carrinho
         </button>
       </div>

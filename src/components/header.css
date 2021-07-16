@@ -1,0 +1,28 @@
+.header-container {
+  align-items: center;
+  background: radial-gradient(rgb(214, 214, 214), whitesmoke);
+  display: flex;
+  height: 40px;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.header-container h2 {
+  color: white;
+}
+
+.header-container div img {
+  height: 40px;
+}
+
+.footer-container {
+  background: radial-gradient(darkgray, whitesmoke);
+  color: white;
+  margin-top: 50px;
+  padding: 1px;
+  text-align: center;
+}
+
+a:link {
+  text-decoration: none;
+}

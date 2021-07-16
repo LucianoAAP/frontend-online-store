@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import './checkout.css';
 import PropTypes from 'prop-types';
+import Spinner from '../../img/spinner.jpg';
 
 class Checkout extends Component {
   constructor(props) {
@@ -168,6 +169,7 @@ class Checkout extends Component {
           <meta http-Equiv="refresh" content="3; URL='/'" />
           <h2>Compra Realizada com Sucesso!!!</h2>
           <p>Volte sempre! :D</p>
+          <img src={ Spinner } alt="spinner" width="300" />
           {localStorage.clear()}
         </div>
       );
@@ -190,8 +192,7 @@ class Checkout extends Component {
                   <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
                   <td>{`${title}`}</td>
                   <td>{`R$${price}`}</td>
-                </tr>
-              ))}
+                </tr>))}
             </table>
             <h4>
               Total: R$
@@ -242,7 +243,6 @@ class Checkout extends Component {
     );
   }
 }
-
 Checkout.propTypes = {
   cart: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
