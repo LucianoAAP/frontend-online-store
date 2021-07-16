@@ -114,36 +114,39 @@ class ProductList extends React.Component {
     return (
       <div>
         <form className="search-container">
-          <label htmlFor="searchProduct">
-            <input
-              type="text"
-              name="searchProduct"
-              value={ searchInput }
-              data-testid="query-input"
-              onChange={ this.inputSearchChange }
-            />
-          </label>
-          <button
-            type="button"
-            data-testid="query-button"
-            onClick={ () => {
-              this.setState({ loading: true }, () => this.searchButton());
-            } }
+          <select
+            onChange={ this.handleSelectChange }
+            value={ selectPrice }
+            className="select-order"
           >
-            Procurar
-          </button>
+            <option value="by-price">Ordenar por preço:</option>
+            <option value="bigger">Maior preço</option>
+            <option value="smaller">Menor preço</option>
+          </select>
+          <div>
+            <label htmlFor="searchProduct">
+              <input
+                type="text"
+                name="searchProduct"
+                value={ searchInput }
+                data-testid="query-input"
+                onChange={ this.inputSearchChange }
+              />
+            </label>
+            <button
+              type="button"
+              data-testid="query-button"
+              onClick={ () => {
+                this.setState({ loading: true }, () => this.searchButton());
+              } }
+            >
+              Procurar
+            </button>
+          </div>
         </form>
         <p data-testid="home-initial-message">
           Digite algum termo de pesquisa ou escolha uma categoria.
         </p>
-        <select
-          onChange={ this.handleSelectChange }
-          value={ selectPrice }
-        >
-          <option value="by-price">Ordenar por preço:</option>
-          <option value="bigger">Maior preço</option>
-          <option value="smaller">Menor preço</option>
-        </select>
         <div className="main-container">
           <CategoriesList callback={ this.updateCategory } />
           <div className="product-container">

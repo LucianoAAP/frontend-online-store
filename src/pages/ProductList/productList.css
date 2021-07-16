@@ -4,6 +4,10 @@
   cursor: pointer;
 }
 
+.details-button:hover {
+  background-color: white;
+}
+
 .btn-addtocard {
   background: linear-gradient(270deg, green, white);
   border: none;
@@ -28,10 +32,30 @@
 }
 
 .search-container {
+  background: radial-gradient(rgb(233, 233, 233), whitesmoke);
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.search-container input, select {
+  background-color: white;
+  border: none;
+  border-radius: 10px;
+  margin-right: 5px;
+  padding: 2px 10px;
 }
 
 p {
+  text-align: center;
+}
+
+.select-order {
+  margin-left: 10px;
+  text-align: center;
+  width: 200px;
+}
+
+.select-order option {
   text-align: center;
 }
