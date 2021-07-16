@@ -44,3 +44,30 @@ button:hover {
   color: white;
   font-weight: 900;
 }
+
+.clean-cart-btn {
+  margin-right: 10px;
+  padding: 5px 10px;
+}
+
+.clean-cart-btn:hover {
+  background-color: red;
+}
+
+.less-btn, .rem-btn {
+  margin-right: 2px;
+  padding: 2px 6px;
+}
+
+.less-btn:hover, .rem-btn:hover {
+  background-color: red;
+}
+
+.add-btn {
+  margin-right: 2px;
+  padding: 2px 6px;
+}
+
+.add-btn:hover {
+  background-color: green;
+}
