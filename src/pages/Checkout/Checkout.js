@@ -183,15 +183,12 @@ class Checkout extends Component {
                       <td><img src="https://img.icons8.com/windows/32/000000/checked--v1.png" alt="checked" /></td>
                       <td>{`${title}`}</td>
                       <td>{`x ${quantity}`}</td>
-                      <td>{`R$${handlePrice(price * quantity)}`}</td>
+                      <td>{`${handlePrice(price * quantity)}`}</td>
                     </tr>
                   </tbody>);
               })}
             </table>
-            <h4>
-              Total: R$
-              {total}
-            </h4>
+            <h4>{`Total: ${total}`}</h4>
           </div>
           <div className="buyer-info-container">
             <h4>Informações do Comprador</h4>

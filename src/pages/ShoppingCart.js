@@ -18,8 +18,7 @@ class ShoppingCart extends React.Component {
   }
 
   componentDidMount() {
-    const { cart, quantities } = this.props;
-    this.setCart(cart, quantities);
+    this.setCart();
   }
 
   handlePlusChange(itemId) {
@@ -64,8 +63,12 @@ class ShoppingCart extends React.Component {
     }, 0);
   }
 
-  setCart(items, quantityItems) {
-    this.setState({ cartItems: items, quantities: quantityItems });
+  setCart() {
+    if (JSON.parse(localStorage.getItem('quantities'))) {
+      const getCart = JSON.parse(localStorage.getItem('cart'));
+      const getQuantities = JSON.parse(localStorage.getItem('quantities'));
+      this.setState({ cartItems: getCart, quantities: getQuantities });
+    }
   }
 
   deleteCartItem(id) {
@@ -97,47 +100,48 @@ class ShoppingCart extends React.Component {
         <h1>Carrinho de Compras</h1>
         {cartItems.length === 0
           ? <p data-testid="shopping-cart-empty-message">Seu carrinho está vazio</p>
-          : cartItems.map((item) => (
-            <li
-              key={ item.id }
-              data-testid="shopping-cart-product-name"
-              className={ item.id }
-            >
-              <div>{ item.price }</div>
-              <button
-                type="button"
-                onClick={ () => {
-                  this.deleteCartItem(item.id);
-                } }
+          : cartItems.map((item) => {
+            const { quantity } = quantities.find((qty) => qty.id === item.id);
+            return (
+              <li
+                key={ item.id }
+                data-testid="shopping-cart-product-name"
+                className={ item.id }
               >
-                X
-              </button>
-              {' '}
-              { item.title }
-              {' '}
-              <div>
+                <div>{ handlePrice(item.price * quantity) }</div>
                 <button
                   type="button"
-                  data-testid="product-decrease-quantity"
-                  onClick={ () => this.handleSubtractChange(item.id) }
+                  onClick={ () => {
+                    this.deleteCartItem(item.id);
+                  } }
                 >
-                  -
+                  X
                 </button>
-                {' '}
-                <button
-                  type="button"
-                  data-testid="product-increase-quantity"
-                  onClick={ () => this.handlePlusChange(item.id) }
-                >
-                  +
-                </button>
-                <div data-testid="shopping-cart-product-quantity">
-                  { quantities.find((qty) => qty.id === item.id).quantity }
+                { `${item.title}` }
+                <div>
+                  <button
+                    type="button"
+                    data-testid="product-decrease-quantity"
+                    onClick={ () => this.handleSubtractChange(item.id) }
+                  >
+                    -
+                  </button>
+                  {' '}
+                  <button
+                    type="button"
+                    data-testid="product-increase-quantity"
+                    onClick={ () => this.handlePlusChange(item.id) }
+                  >
+                    +
+                  </button>
+                  <div data-testid="shopping-cart-product-quantity">
+                    { quantity }
+                  </div>
                 </div>
-              </div>
-            </li>
-          ))}
-        <h2>{`R$${totalPrice}`}</h2>
+              </li>
+            );
+          })}
+        <h2>{`${totalPrice}`}</h2>
         {cartItems.length > 0
           && (
             <div>
@@ -156,8 +160,6 @@ class ShoppingCart extends React.Component {
 }
 
 ShoppingCart.propTypes = {
-  cart: PropTypes.arrayOf(PropTypes.object).isRequired,
-  quantities: PropTypes.arrayOf(PropTypes.object).isRequired,
   updateCartToApp: PropTypes.func.isRequired,
   handlePrice: PropTypes.func.isRequired,
 };

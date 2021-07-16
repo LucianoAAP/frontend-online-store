@@ -26,9 +26,7 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if (JSON.parse(localStorage.getItem('quantities'))) {
-      this.getLocalStorage();
-    }
+    this.getLocalStorage();
   }
 
   handlePrice(price) {
@@ -38,9 +36,9 @@ class App extends React.Component {
       if (splittedPrice[1].length < 2) {
         return `${splittedPrice[0]},${splittedPrice[1]}0`;
       }
-      return `${splittedPrice[0]},${splittedPrice[1]}`;
+      return `R$${splittedPrice[0]},${splittedPrice[1]}`;
     }
-    return `${fixedPrice},00`;
+    return `R$${fixedPrice},00`;
   }
 
   setLocalStorage(cart, quantities) {
@@ -49,9 +47,11 @@ class App extends React.Component {
   }
 
   getLocalStorage() {
-    const getCart = JSON.parse(localStorage.getItem('cart'));
-    const getQuantities = JSON.parse(localStorage.getItem('quantities'));
-    this.setState({ cart: getCart, quantities: getQuantities });
+    if (JSON.parse(localStorage.getItem('quantities'))) {
+      const getCart = JSON.parse(localStorage.getItem('cart'));
+      const getQuantities = JSON.parse(localStorage.getItem('quantities'));
+      this.setState({ cart: getCart, quantities: getQuantities });
+    }
   }
 
   cartAdd(product) {
@@ -126,8 +126,6 @@ class App extends React.Component {
             path="/cart"
             render={ (props) => (<ShoppingCart
               { ...props }
-              cart={ cart }
-              quantities={ quantities }
               totalItemsSum={ this.totalItemsSum() }
               updateCartToApp={ this.updateCartToApp }
               handlePrice={ this.handlePrice }
