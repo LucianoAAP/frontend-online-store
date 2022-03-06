@@ -1,6 +1,6 @@
 # O projeto
 
-Esta é uma versão levemente modificade de um projeto de front-end em grupo que desenvolvemos no curso de desenvolvimento web da Trybe. A aplicação foi feita utilizando React.js e se consiste em uma loja virtual, utilizando uma API com o seguinte endpoint:
+Esta é uma versão levemente modificada de um projeto de front-end em grupo que desenvolvemos no curso de desenvolvimento web da Trybe. A aplicação foi feita utilizando React.js e se consiste em uma loja virtual, utilizando uma API com o seguinte endpoint:
 
 - https://api.mercadolibre.com/sites/MLB/
 
