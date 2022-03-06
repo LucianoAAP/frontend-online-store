@@ -27,7 +27,7 @@ Este projeto foi um trabalho em grupo desenvolvido por:
 
 # Começando
 
-Este projeto requer Node.js
+Este projeto requer o pacote "NPM"
 
 ## Instalação
 
