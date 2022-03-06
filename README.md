@@ -14,7 +14,7 @@ Este projeto foi um trabalho em grupo desenvolvido por:
 - Thiago Prado: https://github.com/thiagopcdev
 - Alice Gonçalves: https://github.com/AliceGS19
 
-# Recursos
+# Funcionalidades
 
 - [x] página de listagem de produtos
 - [x] página do carrinho de compras
